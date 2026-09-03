@@ -6,12 +6,10 @@ import Register from "./pages/auth/Register";
 import Jobs from "./pages/jobs/Jobs";
 import JobDetails from "./pages/jobs/JobDetails";
 import Applications from "./pages/applications/Applications";
+import Favorites from "./pages/favorites/Favorites";
 import Chat from "./pages/messaging/Chat";
 import NotFound from "./pages/NotFound";
-
-function Home() {
-  return <div><h1>JobConnect</h1></div>;
-}
+import Home from "./pages/home/Home";
 
 function App() {
   return (
@@ -20,13 +18,22 @@ function App() {
         <Routes>
           <Route element={<Layout />}>
             <Route path="/" element={<Home />} />
+
             <Route path="/jobs" element={<Jobs />} />
+
             <Route path="/jobs/:id" element={<JobDetails />} />
+
             <Route path="/applications" element={<Applications />} />
+
+            <Route path="/favorites" element={<Favorites />} />
+
             <Route path="/chat" element={<Chat />} />
           </Route>
+
           <Route path="/login" element={<Login />} />
+
           <Route path="/register" element={<Register />} />
+
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
