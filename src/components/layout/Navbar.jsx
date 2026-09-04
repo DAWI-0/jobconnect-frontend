@@ -9,6 +9,10 @@ import {
   Heart,
   User,
   LogOut,
+  BriefcaseBusiness,
+  FileText,
+  LayoutDashboard,
+  MessageCircle,
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "../../context/AuthContext";
@@ -27,11 +31,14 @@ export default function Navbar() {
   const langRef = useRef(null);
   const profileRef = useRef(null);
 
+  // ============================================================
+  // DARK MODE
+  // ============================================================
+
   const [darkMode, setDarkMode] = useState(() => {
     return localStorage.getItem("theme") === "dark";
   });
 
-  // Dark mode
   useEffect(() => {
     const root = document.documentElement;
 
@@ -44,7 +51,10 @@ export default function Navbar() {
     }
   }, [darkMode]);
 
-  // Language direction
+  // ============================================================
+  // LANGUAGE / RTL
+  // ============================================================
+
   useEffect(() => {
     document.documentElement.dir =
       i18n.language === "ar" ? "rtl" : "ltr";
@@ -52,7 +62,10 @@ export default function Navbar() {
     document.documentElement.lang = i18n.language;
   }, [i18n.language]);
 
-  // Click outside
+  // ============================================================
+  // CLICK OUTSIDE
+  // ============================================================
+
   useEffect(() => {
     function handleClickOutside(e) {
       if (
@@ -85,6 +98,10 @@ export default function Navbar() {
     };
   }, [mobileMenuOpen]);
 
+  // ============================================================
+  // LANGUAGE
+  // ============================================================
+
   const changeLanguage = (language) => {
     i18n.changeLanguage(language);
     localStorage.setItem("language", language);
@@ -93,12 +110,22 @@ export default function Navbar() {
     setMobileMenuOpen(false);
   };
 
+  // ============================================================
+  // LOGOUT
+  // ============================================================
+
   const handleLogout = () => {
     logout();
+
     setProfileOpen(false);
     setMobileMenuOpen(false);
+
     navigate("/login");
   };
+
+  // ============================================================
+  // CLOSE MOBILE MENU
+  // ============================================================
 
   const closeMobileMenu = () => {
     setMobileMenuOpen(false);
@@ -106,13 +133,34 @@ export default function Navbar() {
     setProfileOpen(false);
   };
 
+  // ============================================================
+  // LANGUAGE DISPLAY
+  // ============================================================
+
   const currentLanguage = i18n.language?.startsWith("ar")
     ? "AR"
     : i18n.language?.startsWith("en")
       ? "EN"
       : "FR";
 
-  const isActive = (path) => location.pathname === path;
+  // ============================================================
+  // ACTIVE LINK
+  // ============================================================
+
+  const isActive = (path) => {
+    if (path === "/jobs") {
+      return (
+        location.pathname === "/jobs" ||
+        location.pathname.startsWith("/jobs/")
+      );
+    }
+
+    return location.pathname === path;
+  };
+
+  // ============================================================
+  // DESKTOP LINK STYLE
+  // ============================================================
 
   const navLinkClass = (path) =>
     `text-sm font-medium transition ${
@@ -121,6 +169,10 @@ export default function Navbar() {
         : "text-slate-600 hover:text-primary dark:text-slate-300"
     }`;
 
+  // ============================================================
+  // MOBILE LINK STYLE
+  // ============================================================
+
   const mobileLinkClass = (path) =>
     `rounded-lg px-4 py-3 text-sm ${
       isActive(path)
@@ -128,13 +180,20 @@ export default function Navbar() {
         : "font-medium text-slate-700 hover:bg-slate-100 hover:text-primary dark:text-slate-300 dark:hover:bg-slate-900"
     }`;
 
+  // ============================================================
+  // ROLE
+  // ============================================================
+
   const formatRole = (role) => {
     if (!role) return "";
 
     return role.charAt(0) + role.slice(1).toLowerCase();
   };
 
-  // User name
+  // ============================================================
+  // USER NAME
+  // ============================================================
+
   const firstName = user?.first_name || "";
   const lastName = user?.last_name || "";
 
@@ -143,7 +202,10 @@ export default function Navbar() {
     user?.username ||
     "User";
 
-  // Initials
+  // ============================================================
+  // INITIALS
+  // ============================================================
+
   const getInitials = () => {
     if (firstName && lastName) {
       return `${firstName.charAt(0)}${lastName.charAt(0)}`.toUpperCase();
@@ -160,7 +222,10 @@ export default function Navbar() {
     return "U";
   };
 
-  // Support several possible API field names
+  // ============================================================
+  // PROFILE IMAGE
+  // ============================================================
+
   const profileImage =
     user?.profile_picture ||
     user?.avatar ||
@@ -169,6 +234,14 @@ export default function Navbar() {
     user?.profile?.avatar ||
     null;
 
+  // ============================================================
+  // ROLE CHECKS
+  // ============================================================
+
+  const isCandidate = user?.role === "CANDIDATE";
+  const isRecruiter = user?.role === "RECRUITER";
+  const isAdmin = user?.role === "ADMIN";
+
   return (
     <nav
       ref={navRef}
@@ -176,7 +249,10 @@ export default function Navbar() {
     >
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
 
-        {/* Logo */}
+        {/* ======================================================
+            LOGO
+        ====================================================== */}
+
         <Link
           to="/"
           onClick={closeMobileMenu}
@@ -186,24 +262,44 @@ export default function Navbar() {
           <span className="text-secondary">Connect</span>
         </Link>
 
-        {/* Desktop */}
+        {/* ======================================================
+            DESKTOP NAVBAR
+        ====================================================== */}
+
         <div className="hidden items-center gap-5 md:flex">
 
+          {/* ----------------------------------------------------
+              PUBLIC / CANDIDATE
+          ---------------------------------------------------- */}
 
-          <Link to="/jobs" className={navLinkClass("/jobs")}>
-            {t("nav.jobs")}
-          </Link>
+          {!user && (
+            <Link
+              to="/"
+              className={navLinkClass("/")}
+            >
+              {t("nav.home")}
+            </Link>
+          )}
 
-          {user?.role === "CANDIDATE" && (
+          {/* ----------------------------------------------------
+              CANDIDATE
+          ---------------------------------------------------- */}
+
+          {isCandidate && (
             <>
+              <Link
+                to="/jobs"
+                className={navLinkClass("/jobs")}
+              >
+                {t("nav.jobs")}
+              </Link>
+
               <Link
                 to="/applications"
                 className={navLinkClass("/applications")}
               >
                 {t("nav.applications")}
               </Link>
-
-              {/* Favorites */}
               <Link
                 to="/favorites"
                 className={`relative flex h-10 w-10 items-center justify-center rounded-lg border transition ${
@@ -222,14 +318,111 @@ export default function Navbar() {
                   }
                 />
               </Link>
+
+              <Link
+                to="/chat"
+                className={navLinkClass("/chat")}
+              >
+                <span className="flex items-center gap-1.5">
+                  <MessageCircle size={17} />
+                  {t("nav.chat")}
+                </span>
+              </Link>
             </>
           )}
 
-          {/* Auth */}
+          {/* ----------------------------------------------------
+              RECRUITER
+          ---------------------------------------------------- */}
+
+          {isRecruiter && (
+            <>
+              <Link
+                to="/recruiter"
+                className={navLinkClass("/recruiter")}
+              >
+                <span className="flex items-center gap-1.5">
+                  <LayoutDashboard size={17} />
+                  {t("nav.dashboard")}
+                </span>
+              </Link>
+
+              <Link
+                to="/recruiter/jobs"
+                className={navLinkClass("/recruiter/jobs")}
+              >
+                <span className="flex items-center gap-1.5">
+                  <BriefcaseBusiness size={17} />
+                  {t("nav.myJobs")}
+                </span>
+              </Link>
+
+              <Link
+                to="/recruiter/applications"
+                className={navLinkClass("/recruiter/applications")}
+              >
+                <span className="flex items-center gap-1.5">
+                  <FileText size={17} />
+                  {t("nav.candidateApplications")}
+                </span>
+              </Link>
+
+              <Link
+                to="/chat"
+                className={navLinkClass("/chat")}
+              >
+                <span className="flex items-center gap-1.5">
+                  <MessageCircle size={17} />
+                  {t("nav.chat")}
+                </span>
+              </Link>
+            </>
+          )}
+
+          {/* ----------------------------------------------------
+              ADMIN
+          ---------------------------------------------------- */}
+
+          {isAdmin && (
+            <>
+              <Link
+                to="/admin"
+                className={navLinkClass("/admin")}
+              >
+                <span className="flex items-center gap-1.5">
+                  <LayoutDashboard size={17} />
+                  {t("nav.dashboard")}
+                </span>
+              </Link>
+
+              <Link
+                to="/jobs"
+                className={navLinkClass("/jobs")}
+              >
+                {t("nav.jobs")}
+              </Link>
+
+              <Link
+                to="/admin/applications"
+                className={navLinkClass("/admin/applications")}
+              >
+                <span className="flex items-center gap-1.5">
+                  <FileText size={17} />
+                  {t("nav.candidateApplications")}
+                </span>
+              </Link>
+            </>
+          )}
+
+          {/* ====================================================
+              AUTH
+          ==================================================== */}
+
           {user ? (
             <div className="flex items-center gap-3">
 
               {/* Profile dropdown */}
+
               <div
                 className="relative"
                 ref={profileRef}
@@ -241,7 +434,9 @@ export default function Navbar() {
                   }}
                   className="flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-2 py-1.5 transition hover:border-primary/30 hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-900 dark:hover:border-primary/30 dark:hover:bg-slate-800"
                 >
+
                   {/* Avatar */}
+
                   {profileImage ? (
                     <img
                       src={profileImage}
@@ -255,6 +450,7 @@ export default function Navbar() {
                   )}
 
                   <div className="hidden text-start lg:block">
+
                     <p className="max-w-28 truncate text-sm font-semibold text-slate-800 dark:text-slate-100">
                       {fullName}
                     </p>
@@ -262,6 +458,7 @@ export default function Navbar() {
                     <p className="text-xs text-primary">
                       {formatRole(user.role)}
                     </p>
+
                   </div>
 
                   <ChevronDown
@@ -270,13 +467,18 @@ export default function Navbar() {
                       profileOpen ? "rotate-180" : ""
                     }`}
                   />
+
                 </button>
+
+                {/* Profile dropdown */}
 
                 {profileOpen && (
                   <div className="absolute end-0 mt-2 w-56 overflow-hidden rounded-xl border border-slate-200 bg-white p-1.5 shadow-xl shadow-slate-900/10 dark:border-slate-700 dark:bg-slate-900">
 
                     {/* User info */}
+
                     <div className="mb-1 flex items-center gap-3 rounded-lg bg-slate-50 px-3 py-3 dark:bg-slate-800">
+
                       {profileImage ? (
                         <img
                           src={profileImage}
@@ -290,6 +492,7 @@ export default function Navbar() {
                       )}
 
                       <div className="min-w-0">
+
                         <p className="truncate text-sm font-semibold text-slate-800 dark:text-slate-100">
                           {fullName}
                         </p>
@@ -297,10 +500,13 @@ export default function Navbar() {
                         <p className="truncate text-xs text-slate-500 dark:text-slate-400">
                           {user?.email}
                         </p>
+
                       </div>
+
                     </div>
 
                     {/* Profile */}
+
                     <Link
                       to="/profile"
                       onClick={() => setProfileOpen(false)}
@@ -311,6 +517,7 @@ export default function Navbar() {
                     </Link>
 
                     {/* Logout */}
+
                     <button
                       onClick={handleLogout}
                       className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-start text-sm font-medium text-red-600 transition hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-950/30"
@@ -318,12 +525,20 @@ export default function Navbar() {
                       <LogOut size={17} />
                       {t("nav.logout")}
                     </button>
+
                   </div>
                 )}
+
               </div>
             </div>
           ) : (
+
+            /* --------------------------------------------------
+               NOT LOGGED IN
+            -------------------------------------------------- */
+
             <div className="flex items-center gap-3">
+
               <Link
                 to="/login"
                 className={navLinkClass("/login")}
@@ -337,11 +552,18 @@ export default function Navbar() {
               >
                 {t("nav.register")}
               </Link>
+
             </div>
           )}
 
-          {/* Language */}
-          <div className="relative" ref={langRef}>
+          {/* ====================================================
+              LANGUAGE
+          ==================================================== */}
+
+          <div
+            className="relative"
+            ref={langRef}
+          >
             <button
               onClick={() => {
                 setLanguageOpen(!languageOpen);
@@ -382,11 +604,15 @@ export default function Navbar() {
                 >
                   العربية
                 </button>
+
               </div>
             )}
           </div>
 
-          {/* Dark mode */}
+          {/* ====================================================
+              DARK MODE
+          ==================================================== */}
+
           <button
             onClick={() => setDarkMode(!darkMode)}
             aria-label={darkMode ? "Light mode" : "Dark mode"}
@@ -398,13 +624,18 @@ export default function Navbar() {
               <Moon size={19} />
             )}
           </button>
+
         </div>
 
-        {/* Mobile controls */}
+        {/* ======================================================
+            MOBILE CONTROLS
+        ====================================================== */}
+
         <div className="flex items-center gap-2 md:hidden">
 
-          {/* Favorite mobile */}
-          {user?.role === "CANDIDATE" && (
+          {/* Favorite */}
+
+          {isCandidate && (
             <Link
               to="/favorites"
               className={`flex h-10 w-10 items-center justify-center rounded-lg border transition ${
@@ -424,7 +655,8 @@ export default function Navbar() {
             </Link>
           )}
 
-          {/* Avatar mobile */}
+          {/* Avatar */}
+
           {user && (
             <button
               onClick={() => {
@@ -447,6 +679,8 @@ export default function Navbar() {
             </button>
           )}
 
+          {/* Dark mode */}
+
           <button
             onClick={() => setDarkMode(!darkMode)}
             aria-label={darkMode ? "Light mode" : "Dark mode"}
@@ -459,6 +693,8 @@ export default function Navbar() {
             )}
           </button>
 
+          {/* Menu */}
+
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             className="flex h-10 w-10 items-center justify-center rounded-lg border border-slate-200 text-slate-700 hover:border-primary hover:text-primary dark:border-slate-700 dark:text-slate-300"
@@ -469,15 +705,21 @@ export default function Navbar() {
               <Menu size={21} />
             )}
           </button>
+
         </div>
       </div>
 
-      {/* Mobile profile dropdown */}
+      {/* ========================================================
+          MOBILE PROFILE
+      ======================================================== */}
+
       {profileOpen && user && (
         <div className="border-t border-slate-200 bg-white px-4 py-3 dark:border-slate-800 dark:bg-slate-950 md:hidden">
+
           <div className="rounded-xl border border-slate-200 bg-slate-50 p-3 dark:border-slate-800 dark:bg-slate-900">
 
             <div className="flex items-center gap-3">
+
               {profileImage ? (
                 <img
                   src={profileImage}
@@ -491,6 +733,7 @@ export default function Navbar() {
               )}
 
               <div className="min-w-0">
+
                 <p className="truncate font-semibold text-slate-800 dark:text-slate-100">
                   {fullName}
                 </p>
@@ -498,7 +741,9 @@ export default function Navbar() {
                 <p className="text-xs text-primary">
                   {formatRole(user.role)}
                 </p>
+
               </div>
+
             </div>
 
             <div className="mt-3 border-t border-slate-200 pt-2 dark:border-slate-800">
@@ -519,34 +764,61 @@ export default function Navbar() {
                 <LogOut size={17} />
                 {t("nav.logout")}
               </button>
+
             </div>
+
           </div>
+
         </div>
       )}
 
-      {/* Mobile menu */}
+      {/* ========================================================
+          MOBILE MENU
+      ======================================================== */}
+
       {mobileMenuOpen && (
         <div className="border-t border-slate-200 bg-white px-4 py-4 dark:border-slate-800 dark:bg-slate-950 md:hidden">
+
           <div className="flex flex-col gap-2">
 
-            <Link
-              to="/"
-              onClick={closeMobileMenu}
-              className={mobileLinkClass("/")}
-            >
-              {t("nav.home")}
-            </Link>
+            {/* --------------------------------------------------
+                NOT LOGGED IN
+            -------------------------------------------------- */}
 
-            <Link
-              to="/jobs"
-              onClick={closeMobileMenu}
-              className={mobileLinkClass("/jobs")}
-            >
-              {t("nav.jobs")}
-            </Link>
-
-            {user?.role === "CANDIDATE" && (
+            {!user && (
               <>
+                <Link
+                  to="/"
+                  onClick={closeMobileMenu}
+                  className={mobileLinkClass("/")}
+                >
+                  {t("nav.home")}
+                </Link>
+
+                <Link
+                  to="/jobs"
+                  onClick={closeMobileMenu}
+                  className={mobileLinkClass("/jobs")}
+                >
+                  {t("nav.jobs")}
+                </Link>
+              </>
+            )}
+
+            {/* --------------------------------------------------
+                CANDIDATE
+            -------------------------------------------------- */}
+
+            {isCandidate && (
+              <>
+                <Link
+                  to="/jobs"
+                  onClick={closeMobileMenu}
+                  className={mobileLinkClass("/jobs")}
+                >
+                  {t("nav.jobs")}
+                </Link>
+
                 <Link
                   to="/applications"
                   onClick={closeMobileMenu}
@@ -572,13 +844,118 @@ export default function Navbar() {
                     {t("nav.favorites")}
                   </span>
                 </Link>
+
+                <Link
+                  to="/chat"
+                  onClick={closeMobileMenu}
+                  className={mobileLinkClass("/chat")}
+                >
+                  <span className="flex items-center gap-3">
+                    <MessageCircle size={17} />
+                    {t("nav.chat")}
+                  </span>
+                </Link>
+              </>
+            )}
+
+            {/* --------------------------------------------------
+                RECRUITER
+            -------------------------------------------------- */}
+
+            {isRecruiter && (
+              <>
+                <Link
+                  to="/recruiter"
+                  onClick={closeMobileMenu}
+                  className={mobileLinkClass("/recruiter")}
+                >
+                  <span className="flex items-center gap-3">
+                    <LayoutDashboard size={17} />
+                    {t("nav.dashboard")}
+                  </span>
+                </Link>
+
+                <Link
+                  to="/recruiter/jobs"
+                  onClick={closeMobileMenu}
+                  className={mobileLinkClass("/recruiter/jobs")}
+                >
+                  <span className="flex items-center gap-3">
+                    <BriefcaseBusiness size={17} />
+                    {t("nav.myJobs")}
+                  </span>
+                </Link>
+
+                <Link
+                  to="/recruiter/applications"
+                  onClick={closeMobileMenu}
+                  className={mobileLinkClass("/recruiter/applications")}
+                >
+                  <span className="flex items-center gap-3">
+                    <FileText size={17} />
+                    {t("nav.candidateApplications")}
+                  </span>
+                </Link>
+
+                <Link
+                  to="/chat"
+                  onClick={closeMobileMenu}
+                  className={mobileLinkClass("/chat")}
+                >
+                  <span className="flex items-center gap-3">
+                    <MessageCircle size={17} />
+                    {t("nav.chat")}
+                  </span>
+                </Link>
+              </>
+            )}
+
+            {/* --------------------------------------------------
+                ADMIN
+            -------------------------------------------------- */}
+
+            {isAdmin && (
+              <>
+                <Link
+                  to="/admin"
+                  onClick={closeMobileMenu}
+                  className={mobileLinkClass("/admin")}
+                >
+                  <span className="flex items-center gap-3">
+                    <LayoutDashboard size={17} />
+                    {t("nav.dashboard")}
+                  </span>
+                </Link>
+
+                <Link
+                  to="/jobs"
+                  onClick={closeMobileMenu}
+                  className={mobileLinkClass("/jobs")}
+                >
+                  {t("nav.jobs")}
+                </Link>
+
+                <Link
+                  to="/admin/applications"
+                  onClick={closeMobileMenu}
+                  className={mobileLinkClass("/admin/applications")}
+                >
+                  <span className="flex items-center gap-3">
+                    <FileText size={17} />
+                    {t("nav.candidateApplications")}
+                  </span>
+                </Link>
               </>
             )}
 
             <div className="my-2 border-t border-slate-200 dark:border-slate-800" />
 
-            {/* Mobile language */}
+            {/* ==================================================
+                LANGUAGE
+            ================================================== */}
+
             <div className="grid grid-cols-3 gap-2">
+
               <button
                 onClick={() => changeLanguage("fr")}
                 className={`rounded-lg px-3 py-2 text-sm ${
@@ -606,20 +983,21 @@ export default function Navbar() {
                 className={`rounded-lg px-3 py-2 text-sm ${
                   currentLanguage === "AR"
                     ? "bg-primary text-white"
-                    : "bg-slate-100 text-slate-700 dark:bg-slate-900 dark:text-slate-300"
+                    : "bg-slate-100 text-slate-900 dark:bg-slate-800 dark:text-slate-300"
                 }`}
               >
                 AR
               </button>
+
             </div>
+
+            {/* ==================================================
+                LOGIN / REGISTER
+            ================================================== */}
 
             {!user && (
               <>
                 <div className="mt-2 border-t border-slate-200 dark:border-slate-800" />
-
-                <Link to="/" className={navLinkClass("/")}>
-                  {t("nav.home")}
-                </Link>
 
                 <Link
                   to="/login"
@@ -638,6 +1016,7 @@ export default function Navbar() {
                 </Link>
               </>
             )}
+
           </div>
         </div>
       )}

@@ -30,7 +30,7 @@ export default function Login() {
     setLoading(true);
     try {
       await login(form);
-      navigate("/");
+      navigate("/jobs");
     } catch (err) {
       setError(err.response?.data?.detail || "Erreur de connexion");
     } finally {
