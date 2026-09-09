@@ -110,59 +110,31 @@ const resources = {
       // APPLICATIONS
       // -------------------------
       applications: {
-        title: "Mes candidatures",
+  title: "Mes candidatures",
+  applications: "candidatures",
+  application: "candidature",
+  error: "Impossible de charger vos candidatures.",
+  empty: "Aucune candidature",
+  emptyDescription:
+    "Vous n'avez pas encore postulé à une offre. Consultez les offres disponibles et trouvez votre prochaine opportunité.",
+  browseJobs: "Parcourir les offres",
+  offer: "Offre",
+  location: "Lieu",
+  locationNotSpecified: "Non précisé",
+  contract: "Type de contrat",
+  appliedAt: "Date de candidature",
+  viewOffer: "Voir l'offre",
 
-        subtitle:
-          "Suivez l'évolution de toutes vos candidatures",
-
-        loading: "Chargement de vos candidatures...",
-
-        error:
-          "Impossible de charger vos candidatures.",
-
-        retry: "Réessayer",
-
-        empty: "Aucune candidature",
-
-        emptyDescription:
-          "Vous n'avez encore envoyé aucune candidature.",
-
-        browseJobs: "Parcourir les offres",
-
-        appliedOn: "Candidature envoyée le",
-
-        status: "Statut",
-
-        viewJob: "Voir l'offre",
-
-        pending: "En attente",
-
-        reviewing: "En cours d'examen",
-
-        shortlisted: "Présélectionné",
-
-        interview: "Entretien",
-
-        accepted: "Accepté",
-
-        rejected: "Refusé",
-
-        withdrawn: "Retiré",
-
-        PENDING: "En attente",
-
-        REVIEWING: "En cours d'examen",
-
-        SHORTLISTED: "Présélectionné",
-
-        INTERVIEW: "Entretien",
-
-        ACCEPTED: "Accepté",
-
-        REJECTED: "Refusé",
-
-        WITHDRAWN: "Retiré",
-      },
+  statuses: {
+    PENDING: "En attente",
+    REVIEWING: "En cours d'examen",
+    SHORTLISTED: "Présélectionné",
+    INTERVIEW: "Entretien",
+    ACCEPTED: "Accepté",
+    REJECTED: "Refusé",
+    WITHDRAWN: "Retirée",
+  },
+},
 
       // -------------------------
       // FAVORITES
@@ -372,6 +344,29 @@ const resources = {
         ctaSubtitle:
           "Rejoignez JobConnect et donnez un nouvel élan à votre carrière.",
       },
+      profile: {
+  title: "Mon profil",
+  edit: "Modifier le profil",
+  saveSuccess: "Profil mis à jour avec succès.",
+  saveError: "Erreur lors de la sauvegarde.",
+  loadError: "Erreur de chargement du profil.",
+  notFound: "Profil non trouvé.",
+  phone: "Téléphone",
+  location: "Localisation",
+  bio: "Bio",
+  linkedin: "LinkedIn",
+  github: "GitHub",
+  cv: "CV",
+  photo: "Photo de profil",
+  jobTitle: "Poste",
+  company: "Entreprise",
+},
+common: {
+  loading: "Chargement...",
+  save: "Enregistrer",
+  saving: "Sauvegarde...",
+  cancel: "Annuler",
+},
     },
   },
 
@@ -490,61 +485,31 @@ const resources = {
       // APPLICATIONS
       // -------------------------
       applications: {
-        title: "My Applications",
+  title: "My Applications",
+  applications: "applications",
+  application: "application",
+  error: "Unable to load your applications.",
+  empty: "No applications",
+  emptyDescription:
+    "You haven't applied to any jobs yet. Browse the available opportunities and find your next career move.",
+  browseJobs: "Browse Jobs",
+  offer: "Job Offer",
+  location: "Location",
+  locationNotSpecified: "Not specified",
+  contract: "Contract Type",
+  appliedAt: "Applied On",
+  viewOffer: "View Job",
 
-        subtitle:
-          "Track the progress of all your applications",
-
-        loading:
-          "Loading your applications...",
-
-        error:
-          "Unable to load your applications.",
-
-        retry: "Retry",
-
-        empty: "No applications",
-
-        emptyDescription:
-          "You haven't submitted any applications yet.",
-
-        browseJobs:
-          "Browse jobs",
-
-        appliedOn: "Applied on",
-
-        status: "Status",
-
-        viewJob: "View job",
-
-        pending: "Pending",
-
-        reviewing: "Under review",
-
-        shortlisted: "Shortlisted",
-
-        interview: "Interview",
-
-        accepted: "Accepted",
-
-        rejected: "Rejected",
-
-        withdrawn: "Withdrawn",
-
-        PENDING: "Pending",
-
-        REVIEWING: "Under review",
-
-        SHORTLISTED: "Shortlisted",
-
-        INTERVIEW: "Interview",
-
-        ACCEPTED: "Accepted",
-
-        REJECTED: "Rejected",
-
-        WITHDRAWN: "Withdrawn",
-      },
+  statuses: {
+    PENDING: "Pending",
+    REVIEWING: "Under Review",
+    SHORTLISTED: "Shortlisted",
+    INTERVIEW: "Interview",
+    ACCEPTED: "Accepted",
+    REJECTED: "Rejected",
+    WITHDRAWN: "Withdrawn",
+  },
+},
 
       // -------------------------
       // FAVORITES
@@ -773,6 +738,29 @@ const resources = {
         ctaSubtitle:
           "Join JobConnect and take the next step in your career.",
       },
+      profile: {
+  title: "My Profile",
+  edit: "Edit Profile",
+  saveSuccess: "Profile updated successfully.",
+  saveError: "Error saving profile.",
+  loadError: "Error loading profile.",
+  notFound: "Profile not found.",
+  phone: "Phone",
+  location: "Location",
+  bio: "Bio",
+  linkedin: "LinkedIn",
+  github: "GitHub",
+  cv: "CV",
+  photo: "Profile Picture",
+  jobTitle: "Job Title",
+  company: "Company",
+},
+common: {
+  loading: "Loading...",
+  save: "Save",
+  saving: "Saving...",
+  cancel: "Cancel",
+},
     },
   },
 
@@ -930,81 +918,31 @@ const resources = {
       // APPLICATIONS
       // -------------------------
       applications: {
-        title:
-          "طلباتي",
+  title: "طلباتي",
+  applications: "طلبات",
+  application: "طلب",
+  error: "تعذر تحميل طلبات التوظيف الخاصة بك.",
+  empty: "لا توجد طلبات",
+  emptyDescription:
+    "لم تتقدم إلى أي عرض عمل بعد. تصفح العروض المتاحة وابحث عن فرصتك المهنية القادمة.",
+  browseJobs: "تصفح عروض العمل",
+  offer: "عرض العمل",
+  location: "الموقع",
+  locationNotSpecified: "غير محدد",
+  contract: "نوع العقد",
+  appliedAt: "تاريخ التقديم",
+  viewOffer: "عرض الوظيفة",
 
-        subtitle:
-          "تتبع تقدم جميع طلبات التوظيف الخاصة بك",
-
-        loading:
-          "جاري تحميل طلباتك...",
-
-        error:
-          "تعذر تحميل طلباتك.",
-
-        retry:
-          "إعادة المحاولة",
-
-        empty:
-          "لا توجد طلبات توظيف",
-
-        emptyDescription:
-          "لم تقم بإرسال أي طلب توظيف حتى الآن.",
-
-        browseJobs:
-          "تصفح الوظائف",
-
-        appliedOn:
-          "تم التقديم في",
-
-        status:
-          "الحالة",
-
-        viewJob:
-          "عرض الوظيفة",
-
-        pending:
-          "في الانتظار",
-
-        reviewing:
-          "قيد المراجعة",
-
-        shortlisted:
-          "تم اختيارك مبدئياً",
-
-        interview:
-          "مقابلة",
-
-        accepted:
-          "تم القبول",
-
-        rejected:
-          "مرفوض",
-
-        withdrawn:
-          "تم السحب",
-
-        PENDING:
-          "في الانتظار",
-
-        REVIEWING:
-          "قيد المراجعة",
-
-        SHORTLISTED:
-          "تم اختيارك مبدئياً",
-
-        INTERVIEW:
-          "مقابلة",
-
-        ACCEPTED:
-          "تم القبول",
-
-        REJECTED:
-          "مرفوض",
-
-        WITHDRAWN:
-          "تم السحب",
-      },
+  statuses: {
+    PENDING: "قيد الانتظار",
+    REVIEWING: "قيد المراجعة",
+    SHORTLISTED: "ضمن القائمة المختصرة",
+    INTERVIEW: "مقابلة",
+    ACCEPTED: "مقبول",
+    REJECTED: "مرفوض",
+    WITHDRAWN: "تم سحبه",
+  },
+},
 
       // -------------------------
       // FAVORITES
@@ -1239,6 +1177,29 @@ const resources = {
         ctaSubtitle:
           "انضم إلى JobConnect وابدأ الخطوة التالية في مسيرتك المهنية.",
       },
+      profile: {
+  title: "الملف الشخصي",
+  edit: "تعديل الملف الشخصي",
+  saveSuccess: "تم تحديث الملف الشخصي بنجاح.",
+  saveError: "خطأ أثناء حفظ الملف الشخصي.",
+  loadError: "خطأ أثناء تحميل الملف الشخصي.",
+  notFound: "الملف الشخصي غير موجود.",
+  phone: "الهاتف",
+  location: "الموقع",
+  bio: "نبذة",
+  linkedin: "لينكدإن",
+  github: "جيت هاب",
+  cv: "السيرة الذاتية",
+  photo: "الصورة الشخصية",
+  jobTitle: "المسمى الوظيفي",
+  company: "الشركة",
+},
+common: {
+  loading: "جاري التحميل...",
+  save: "حفظ",
+  saving: "جاري الحفظ...",
+  cancel: "إلغاء",
+},
     },
   },
 };
