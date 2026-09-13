@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { useAuth } from "../../context/AuthContext";
 import api from "../../services/api";
+import loginRegisterImg from "../../assets/loginregister.svg";
 
 const CATEGORIES = [
   { label: "Développement", rotate: -2 },
@@ -191,7 +192,7 @@ export default function Register() {
       {/* =========================
           BRANDING PANEL
       ========================= */}
-      <div className="relative hidden w-1/2 flex-col justify-between bg-gradient-to-br from-primary to-secondary p-12 text-white lg:flex">
+      <div className="relative hidden w-1/2 flex-col justify-between overflow-hidden bg-gradient-to-br from-primary to-secondary p-12 text-white lg:flex">
 
         <Link to="/" className="text-2xl font-bold tracking-tight">
           <span className="text-white">Job</span>
@@ -199,11 +200,11 @@ export default function Register() {
         </Link>
 
         <div className="max-w-sm">
-          <h1 className="text-4xl font-bold leading-tight">
+          <h1 className="page-enter text-4xl font-bold leading-tight">
             Deux façons de rejoindre JobConnect.
           </h1>
 
-          <p className="mt-4 text-white/80">
+          <p className="page-enter-delay-1 mt-4 text-white/80">
             Un compte candidat pour postuler aux meilleures offres, ou un
             compte recruteur pour publier les vôtres.
           </p>
@@ -221,6 +222,13 @@ export default function Register() {
               </span>
             ))}
           </div>
+
+          {/* Illustration */}
+          <img
+            src={loginRegisterImg}
+            alt="Illustration JobConnect"
+            className="float-anim mt-10 w-full max-w-xs drop-shadow-xl"
+          />
         </div>
 
         <p className="text-sm text-white/60">
@@ -233,7 +241,7 @@ export default function Register() {
       ========================= */}
       <div className="flex w-full items-center justify-center px-6 py-10 lg:w-1/2">
 
-        <div className="w-full max-w-md">
+        <div className="page-enter w-full max-w-md">
 
           <Link
             to="/"
@@ -273,7 +281,7 @@ export default function Register() {
             {/* =========================
                 ROLE
             ========================= */}
-            <fieldset className="m-0 border-0 p-0">
+            <fieldset className="page-enter-delay-1 m-0 border-0 p-0">
 
               <legend className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
                 Je suis un...
@@ -340,7 +348,7 @@ export default function Register() {
             {/* =========================
                 NOM / PRENOM
             ========================= */}
-            <div className="grid grid-cols-2 gap-4">
+            <div className="page-enter-delay-2 grid grid-cols-2 gap-4">
 
               <div>
                 <label
@@ -472,7 +480,7 @@ export default function Register() {
             {/* =========================
                 EMAIL
             ========================= */}
-            <div>
+            <div className="page-enter-delay-3">
 
               <label
                 htmlFor="email"

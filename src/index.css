@@ -31,3 +31,55 @@ body {
 #root {
   min-height: 100vh;
 }
+@keyframes page-enter {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.page-enter {
+  animation: page-enter 0.45s ease-out both;
+}
+
+.page-enter-delay-1 {
+  animation: page-enter 0.45s ease-out 0.1s both;
+}
+
+.page-enter-delay-2 {
+  animation: page-enter 0.45s ease-out 0.2s both;
+}
+
+.page-enter-delay-3 {
+  animation: page-enter 0.45s ease-out 0.3s both;
+}
+
+/* Illustration qui flotte doucement */
+@keyframes float-slow {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-14px);
+  }
+}
+
+.float-anim {
+  animation: float-slow 4s ease-in-out infinite;
+}
+
+/* Réduire les animations si l'utilisateur le préfère */
+@media (prefers-reduced-motion: reduce) {
+  .page-enter,
+  .page-enter-delay-1,
+  .page-enter-delay-2,
+  .page-enter-delay-3,
+  .float-anim {
+    animation: none;
+  }
+}

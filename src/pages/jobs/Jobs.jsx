@@ -16,6 +16,11 @@ import {
   Plus,
   Pencil,
   FileText,
+  UserRound,
+Mail,
+Phone,
+MessageCircle,
+BriefcaseBusiness,
 } from "lucide-react";
 
 import api from "../../services/api";
@@ -33,6 +38,7 @@ export default function Jobs() {
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [hoveredRecruiter, setHoveredRecruiter] = useState(null);
 
   const [filters, setFilters] = useState({
     search: "",
@@ -404,20 +410,148 @@ export default function Jobs() {
                 {/* Top */}
                 <div className="flex items-start justify-between gap-4">
                   <div className="flex items-center gap-3">
-                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 text-white shadow-sm">
-                      <Building2 className="h-5 w-5" />
-                    </div>
+                    <div className="h-12 w-12 shrink-0 overflow-hidden rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 shadow-sm">
+  {job.recruiter_profile_picture ? (
+    <img
+      src={job.recruiter_profile_picture}
+      alt={job.recruiter_name || "Recruteur"}
+      className="h-full w-full object-cover"
+    />
+  ) : (
+    <div className="flex h-full w-full items-center justify-center text-sm font-bold text-white">
+      {(job.recruiter_name || "R")
+        .split(" ")
+        .filter(Boolean)
+        .slice(0, 2)
+        .map((name) => name.charAt(0).toUpperCase())
+        .join("")}
+    </div>
+  )}
+</div>
 
-                    <div className="min-w-0">
-                      <h3 className="truncate text-lg font-bold">
-                        {job.title}
-                      </h3>
+                    <div
+  className="relative min-w-0"
+  onMouseEnter={() => {
+    if (!isRecruiterPage && job.recruiter_user_id) {
+      setHoveredRecruiter(job.id);
+    }
+  }}
+  onMouseLeave={() => {
+    if (!isRecruiterPage) {
+      setHoveredRecruiter(null);
+    }
+  }}
+>
+  <h3 className="truncate text-lg font-bold">
+    {job.title}
+  </h3>
 
-                      <p className="mt-0.5 flex items-center gap-1 text-sm text-slate-500 dark:text-slate-400">
-                        <Building2 className="h-3.5 w-3.5" />
-                        {job.company_name}
-                      </p>
-                    </div>
+  <button
+    type="button"
+    className="mt-0.5 flex items-center gap-1 text-sm text-slate-500 transition hover:text-indigo-600 dark:text-slate-400 dark:hover:text-indigo-400"
+  >
+    <Building2 className="h-3.5 w-3.5" />
+    {job.company_name}
+  </button>
+
+  {/* Recruiter hover card */}
+  {!isRecruiterPage &&
+    hoveredRecruiter === job.id &&
+    job.recruiter_user_id && (
+      <div
+        className="absolute left-0 top-full z-50 mt-3 w-80"
+        onMouseEnter={() => setHoveredRecruiter(job.id)}
+        onMouseLeave={() => setHoveredRecruiter(null)}
+      >
+        <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-2xl shadow-slate-900/10 dark:border-slate-700 dark:bg-slate-900">
+          
+          {/* Header */}
+          <div className="bg-gradient-to-r from-indigo-600 to-purple-600 p-5 text-white">
+            <div className="flex items-center gap-3">
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-white/15 text-lg font-bold backdrop-blur">
+                {(job.recruiter_name || "R")
+                  .charAt(0)
+                  .toUpperCase()}
+              </div>
+
+              <div className="min-w-0">
+                <h4 className="truncate font-bold">
+                  {job.recruiter_name || "Recruteur"}
+                </h4>
+
+                <p className="mt-0.5 truncate text-xs text-indigo-100">
+                  {job.recruiter_job_title || "Recruteur"}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Details */}
+          <div className="space-y-3 p-5">
+
+            <div className="flex items-start gap-3">
+              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-indigo-50 dark:bg-indigo-500/10">
+                <Mail className="h-4 w-4 text-indigo-600 dark:text-indigo-400" />
+              </div>
+
+              <div className="min-w-0">
+                <p className="text-xs text-slate-400">
+                  Email
+                </p>
+
+                <p className="truncate text-sm font-medium text-slate-700 dark:text-slate-300">
+                  {job.recruiter_email || "Non disponible"}
+                </p>
+              </div>
+            </div>
+
+            {job.recruiter_phone && (
+              <div className="flex items-start gap-3">
+                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-purple-50 dark:bg-purple-500/10">
+                  <Phone className="h-4 w-4 text-purple-600 dark:text-purple-400" />
+                </div>
+
+                <div>
+                  <p className="text-xs text-slate-400">
+                    Téléphone
+                  </p>
+
+                  <p className="text-sm font-medium text-slate-700 dark:text-slate-300">
+                    {job.recruiter_phone}
+                  </p>
+                </div>
+              </div>
+            )}
+
+            <div className="flex items-start gap-3">
+              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-slate-100 dark:bg-slate-800">
+                <BriefcaseBusiness className="h-4 w-4 text-slate-500 dark:text-slate-400" />
+              </div>
+
+              <div className="min-w-0">
+                <p className="text-xs text-slate-400">
+                  Offre
+                </p>
+
+                <p className="truncate text-sm font-medium text-slate-700 dark:text-slate-300">
+                  {job.title}
+                </p>
+              </div>
+            </div>
+
+            {/* Chat button */}
+            <Link
+              to={`/chat?user=${job.recruiter_user_id}`}
+              className="mt-2 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 px-4 py-2.5 text-sm font-semibold text-white shadow-lg shadow-indigo-500/20 transition hover:-translate-y-0.5 hover:shadow-indigo-500/30"
+            >
+              <MessageCircle className="h-4 w-4" />
+              Contacter le recruteur
+            </Link>
+          </div>
+        </div>
+      </div>
+    )}
+</div>
                   </div>
 
                   <ArrowUpRight className="h-5 w-5 shrink-0 text-slate-300 transition group-hover:text-indigo-500 dark:text-slate-600" />

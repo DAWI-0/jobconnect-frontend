@@ -1,7 +1,9 @@
+Login.jsx
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Mail, Lock, Eye, EyeOff, Loader2, AlertCircle } from "lucide-react";
 import { useAuth } from "../../context/AuthContext";
+import loginRegisterImg from "../../assets/loginregister.svg";
 
 const CATEGORIES = [
   { label: "Développement", rotate: -2 },
@@ -41,17 +43,17 @@ export default function Login() {
   return (
     <div className="flex min-h-screen bg-slate-50 dark:bg-slate-950">
       {/* Branding panel */}
-      <div className="relative hidden w-1/2 flex-col justify-between bg-gradient-to-br from-primary to-secondary p-12 text-white lg:flex">
+      <div className="relative hidden w-1/2 flex-col justify-between overflow-hidden bg-gradient-to-br from-primary to-secondary p-12 text-white lg:flex">
         <Link to="/" className="text-2xl font-bold tracking-tight">
           <span className="text-white">Job</span>
           <span className="text-white/70">Connect</span>
         </Link>
 
         <div className="max-w-sm">
-          <h1 className="text-4xl font-bold leading-tight">
+          <h1 className="page-enter text-4xl font-bold leading-tight">
             Vos candidatures et vos offres, au même endroit.
           </h1>
-          <p className="mt-4 text-white/80">
+          <p className="page-enter-delay-1 mt-4 text-white/80">
             Connectez-vous pour suivre l'avancement de vos candidatures ou
             gérer les offres que vous avez publiées.
           </p>
@@ -67,6 +69,13 @@ export default function Login() {
               </span>
             ))}
           </div>
+
+          {/* Illustration */}
+          <img
+            src={loginRegisterImg}
+            alt="Illustration JobConnect"
+            className="float-anim mt-10 w-full max-w-xs drop-shadow-xl"
+          />
         </div>
 
         <p className="text-sm text-white/60">
@@ -76,7 +85,7 @@ export default function Login() {
 
       {/* Form panel */}
       <div className="flex w-full items-center justify-center px-6 py-12 lg:w-1/2">
-        <div className="w-full max-w-sm">
+        <div className="page-enter w-full max-w-sm">
           <Link
             to="/"
             className="mb-8 inline-flex text-2xl font-bold tracking-tight lg:hidden"
@@ -100,7 +109,7 @@ export default function Login() {
           )}
 
           <form onSubmit={handleSubmit} className="mt-8 space-y-5">
-            <div>
+            <div className="page-enter-delay-1">
               <label
                 htmlFor="email"
                 className="mb-1.5 block text-sm font-medium text-slate-700 dark:text-slate-300"
@@ -126,7 +135,7 @@ export default function Login() {
               </div>
             </div>
 
-            <div>
+            <div className="page-enter-delay-2">
               <label
                 htmlFor="password"
                 className="mb-1.5 block text-sm font-medium text-slate-700 dark:text-slate-300"
@@ -166,7 +175,7 @@ export default function Login() {
             <button
               type="submit"
               disabled={loading}
-              className="flex w-full items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-primary to-secondary px-4 py-2.5 text-sm font-semibold text-white shadow-sm shadow-primary/25 transition hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60 dark:focus-visible:ring-offset-slate-950"
+              className="page-enter-delay-3 flex w-full items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-primary to-secondary px-4 py-2.5 text-sm font-semibold text-white shadow-sm shadow-primary/25 transition hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60 dark:focus-visible:ring-offset-slate-950"
             >
               {loading ? (
                 <>

@@ -16,6 +16,10 @@ import {
   AlertCircle,
   Banknote,
   ChevronRight,
+  MessageCircle,
+  Mail,
+  Phone,
+  UserRound,
 } from "lucide-react";
 
 import { useAuth } from "../../context/AuthContext";
@@ -175,6 +179,65 @@ export default function JobDetails() {
     });
   };
 
+  // ============================================================
+  // RECRUITER
+  // ============================================================
+
+  const getRecruiterName = () => {
+    if (job?.recruiter_name) {
+      return job.recruiter_name;
+    }
+
+    return "Recruteur";
+  };
+
+  const getRecruiterInitials = () => {
+    const name = getRecruiterName();
+
+    return name
+      .split(" ")
+      .filter(Boolean)
+      .slice(0, 2)
+      .map((part) => part.charAt(0).toUpperCase())
+      .join("");
+  };
+
+  const getProfilePictureUrl = (url) => {
+    if (!url) return null;
+
+    if (url.startsWith("http")) {
+      return url;
+    }
+
+    const baseURL =
+      api.defaults.baseURL || "http://127.0.0.1:8000/api";
+
+    const backendURL = baseURL.replace(/\/api\/?$/, "");
+
+    return `${backendURL}${url}`;
+  };
+
+  const recruiterPicture = getProfilePictureUrl(
+    job?.recruiter_profile_picture
+  );
+
+  const goToRecruiterChat = () => {
+    if (!user) {
+      navigate("/login");
+      return;
+    }
+
+    if (!job?.recruiter_user_id) {
+      return;
+    }
+
+    navigate(`/chat?user=${job.recruiter_user_id}`);
+  };
+
+  // ============================================================
+  // LOADING
+  // ============================================================
+
   if (loading) {
     return (
       <main className="min-h-screen bg-slate-50 px-4 py-8 dark:bg-slate-950 sm:px-6 lg:px-8">
@@ -202,10 +265,15 @@ export default function JobDetails() {
     );
   }
 
+  // ============================================================
+  // ERROR
+  // ============================================================
+
   if (error) {
     return (
       <main className="flex min-h-screen items-center justify-center bg-slate-50 px-4 dark:bg-slate-950">
         <div className="w-full max-w-md rounded-3xl border border-slate-200 bg-white p-8 text-center shadow-sm dark:border-slate-800 dark:bg-slate-900">
+
           <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-red-50 dark:bg-red-500/10">
             <AlertCircle className="h-7 w-7 text-red-500" />
           </div>
@@ -238,7 +306,10 @@ export default function JobDetails() {
     <main className="min-h-screen bg-slate-50 px-4 py-8 text-slate-900 transition-colors dark:bg-slate-950 dark:text-slate-100 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-6xl">
 
-        {/* Breadcrumb */}
+        {/* ================================================== */}
+        {/* BREADCRUMB */}
+        {/* ================================================== */}
+
         <Link
           to="/jobs"
           className="mb-6 inline-flex items-center gap-2 text-sm font-medium text-slate-500 transition hover:text-indigo-600 dark:text-slate-400 dark:hover:text-indigo-400"
@@ -247,11 +318,16 @@ export default function JobDetails() {
           {t("jobDetails.backToJobs")}
         </Link>
 
-        {/* Job Header */}
+        {/* ================================================== */}
+        {/* JOB HEADER */}
+        {/* ================================================== */}
+
         <section className="relative overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900">
 
           {/* Gradient decoration */}
+
           <div className="absolute right-0 top-0 h-40 w-40 rounded-full bg-indigo-500/10 blur-3xl" />
+
           <div className="absolute bottom-0 left-1/3 h-32 w-32 rounded-full bg-purple-500/10 blur-3xl" />
 
           <div className="relative p-6 sm:p-8">
@@ -259,12 +335,15 @@ export default function JobDetails() {
             <div className="flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
 
               {/* Company */}
+
               <div className="flex min-w-0 gap-4">
+
                 <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 text-white shadow-lg shadow-indigo-500/20">
                   <Building2 className="h-7 w-7" />
                 </div>
 
                 <div className="min-w-0">
+
                   <p className="mb-1 text-sm font-medium text-indigo-600 dark:text-indigo-400">
                     {job.company_name}
                   </p>
@@ -274,6 +353,7 @@ export default function JobDetails() {
                   </h1>
 
                   <div className="mt-3 flex flex-wrap gap-x-4 gap-y-2 text-sm text-slate-500 dark:text-slate-400">
+
                     <span className="flex items-center gap-1.5">
                       <MapPin className="h-4 w-4" />
                       {job.location || t("jobs.locationNotSpecified")}
@@ -283,16 +363,22 @@ export default function JobDetails() {
                       <CalendarDays className="h-4 w-4" />
                       {formatDate(job.published_at)}
                     </span>
+
                   </div>
                 </div>
               </div>
 
               {/* Favorite */}
+
               {isCandidate && (
                 <button
                   onClick={toggleFavorite}
                   disabled={favLoading}
-                  aria-label={isFav ? t("jobDetails.removeFavorite") : t("jobDetails.addFavorite")}
+                  aria-label={
+                    isFav
+                      ? t("jobDetails.removeFavorite")
+                      : t("jobDetails.addFavorite")
+                  }
                   className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border transition ${
                     isFav
                       ? "border-red-200 bg-red-50 text-red-500 dark:border-red-500/20 dark:bg-red-500/10"
@@ -300,14 +386,18 @@ export default function JobDetails() {
                   }`}
                 >
                   <Heart
-                    className={`h-5 w-5 ${isFav ? "fill-current" : ""}`}
+                    className={`h-5 w-5 ${
+                      isFav ? "fill-current" : ""
+                    }`}
                   />
                 </button>
               )}
             </div>
 
             {/* Badges */}
+
             <div className="mt-7 flex flex-wrap gap-2">
+
               <span className="inline-flex items-center gap-1.5 rounded-full bg-indigo-50 px-3 py-1.5 text-xs font-semibold text-indigo-700 dark:bg-indigo-500/10 dark:text-indigo-400">
                 <Briefcase className="h-3.5 w-3.5" />
                 {getContractLabel(job.contract_type)}
@@ -324,22 +414,37 @@ export default function JobDetails() {
                     : "bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400"
                 }`}
               >
-                {job.remote && <Wifi className="h-3.5 w-3.5" />}
-                {job.remote ? t("jobs.remote") : t("jobs.onsite")}
+                {job.remote && (
+                  <Wifi className="h-3.5 w-3.5" />
+                )}
+
+                {job.remote
+                  ? t("jobs.remote")
+                  : t("jobs.onsite")}
               </span>
+
             </div>
           </div>
         </section>
 
-        {/* Main content */}
+        {/* ================================================== */}
+        {/* MAIN CONTENT */}
+        {/* ================================================== */}
+
         <div className="mt-6 grid gap-6 lg:grid-cols-[1fr_340px]">
 
-          {/* Left */}
+          {/* ================================================= */}
+          {/* LEFT */}
+          {/* ================================================= */}
+
           <div className="space-y-6">
 
             {/* Description */}
+
             <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900 sm:p-8">
+
               <div className="mb-6 flex items-center gap-3">
+
                 <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-indigo-50 dark:bg-indigo-500/10">
                   <Briefcase className="h-5 w-5 text-indigo-600 dark:text-indigo-400" />
                 </div>
@@ -347,17 +452,23 @@ export default function JobDetails() {
                 <h2 className="text-lg font-bold">
                   {t("jobDetails.description")}
                 </h2>
+
               </div>
 
               <p className="whitespace-pre-line text-sm leading-7 text-slate-600 dark:text-slate-300">
-                {job.description || t("jobDetails.noDescription")}
+                {job.description ||
+                  t("jobDetails.noDescription")}
               </p>
+
             </section>
 
             {/* Skills */}
+
             {job.skills?.length > 0 && (
               <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900 sm:p-8">
+
                 <div className="mb-6">
+
                   <h2 className="text-lg font-bold">
                     {t("jobDetails.skills")}
                   </h2>
@@ -365,9 +476,11 @@ export default function JobDetails() {
                   <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
                     {t("jobDetails.skillsSubtitle")}
                   </p>
+
                 </div>
 
                 <div className="flex flex-wrap gap-2.5">
+
                   {job.skills.map((skill) => (
                     <span
                       key={skill.id}
@@ -376,12 +489,16 @@ export default function JobDetails() {
                       {skill.name}
                     </span>
                   ))}
+
                 </div>
+
               </section>
             )}
 
             {/* Job information */}
+
             <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900 sm:p-8">
+
               <h2 className="mb-6 text-lg font-bold">
                 {t("jobDetails.information")}
               </h2>
@@ -389,79 +506,106 @@ export default function JobDetails() {
               <div className="grid gap-5 sm:grid-cols-2">
 
                 <div className="flex gap-3">
+
                   <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-indigo-50 dark:bg-indigo-500/10">
                     <MapPin className="h-5 w-5 text-indigo-600 dark:text-indigo-400" />
                   </div>
 
                   <div>
+
                     <p className="text-xs font-medium text-slate-400">
                       {t("jobDetails.location")}
                     </p>
 
                     <p className="mt-1 text-sm font-semibold">
-                      {job.location || t("jobs.locationNotSpecified")}
+                      {job.location ||
+                        t("jobs.locationNotSpecified")}
                     </p>
+
                   </div>
                 </div>
 
                 <div className="flex gap-3">
+
                   <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-purple-50 dark:bg-purple-500/10">
                     <Briefcase className="h-5 w-5 text-purple-600 dark:text-purple-400" />
                   </div>
 
                   <div>
+
                     <p className="text-xs font-medium text-slate-400">
                       {t("jobDetails.contract")}
                     </p>
 
                     <p className="mt-1 text-sm font-semibold">
-                      {getContractLabel(job.contract_type)}
+                      {getContractLabel(
+                        job.contract_type
+                      )}
                     </p>
+
                   </div>
                 </div>
 
                 <div className="flex gap-3">
+
                   <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-emerald-50 dark:bg-emerald-500/10">
                     <Wifi className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
                   </div>
 
                   <div>
+
                     <p className="text-xs font-medium text-slate-400">
                       {t("jobDetails.workMode")}
                     </p>
 
                     <p className="mt-1 text-sm font-semibold">
-                      {job.remote ? t("jobs.remote") : t("jobs.onsite")}
+                      {job.remote
+                        ? t("jobs.remote")
+                        : t("jobs.onsite")}
                     </p>
+
                   </div>
                 </div>
 
                 <div className="flex gap-3">
+
                   <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-orange-50 dark:bg-orange-500/10">
                     <Clock3 className="h-5 w-5 text-orange-600 dark:text-orange-400" />
                   </div>
 
                   <div>
+
                     <p className="text-xs font-medium text-slate-400">
                       {t("jobDetails.experience")}
                     </p>
 
                     <p className="mt-1 text-sm font-semibold">
-                      {getExperienceLabel(job.experience_level)}
+                      {getExperienceLabel(
+                        job.experience_level
+                      )}
                     </p>
+
                   </div>
                 </div>
+
               </div>
             </section>
           </div>
 
-          {/* Right sidebar */}
+          {/* ================================================= */}
+          {/* RIGHT SIDEBAR */}
+          {/* ================================================= */}
+
           <aside className="space-y-5 lg:sticky lg:top-6 lg:self-start">
 
-            {/* Apply card */}
+            {/* ================================================= */}
+            {/* APPLY CARD */}
+            {/* ================================================= */}
+
             <section className="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900">
 
               <div className="bg-gradient-to-br from-indigo-600 to-purple-600 p-6 text-white">
+
                 <p className="text-sm font-medium text-indigo-100">
                   {t("jobDetails.interested")}
                 </p>
@@ -473,33 +617,42 @@ export default function JobDetails() {
                 <p className="mt-2 text-sm leading-5 text-indigo-100">
                   {t("jobDetails.applySubtitle")}
                 </p>
+
               </div>
 
               <div className="p-5">
 
                 {/* Salary */}
+
                 {job.salary_min && job.salary_max && (
                   <div className="mb-5 rounded-2xl bg-slate-50 p-4 dark:bg-slate-800/70">
+
                     <div className="flex items-center gap-2">
+
                       <Banknote className="h-4 w-4 text-indigo-600 dark:text-indigo-400" />
 
                       <span className="text-xs font-medium text-slate-400">
                         {t("jobs.salary")}
                       </span>
+
                     </div>
 
                     <p className="mt-2 text-lg font-bold">
                       {job.salary_min} – {job.salary_max}
                     </p>
+
                   </div>
                 )}
 
                 {/* Deadline */}
+
                 {job.deadline && (
                   <div className="mb-5 flex items-start gap-3 rounded-2xl border border-slate-100 p-4 dark:border-slate-800">
+
                     <CalendarDays className="mt-0.5 h-5 w-5 shrink-0 text-slate-400" />
 
                     <div>
+
                       <p className="text-xs text-slate-400">
                         {t("jobDetails.deadline")}
                       </p>
@@ -507,33 +660,42 @@ export default function JobDetails() {
                       <p className="mt-1 text-sm font-semibold">
                         {formatDate(job.deadline)}
                       </p>
+
                     </div>
+
                   </div>
                 )}
 
                 {/* Success */}
+
                 {applySuccess && (
                   <div className="mb-4 flex items-start gap-3 rounded-2xl border border-emerald-200 bg-emerald-50 p-4 dark:border-emerald-500/20 dark:bg-emerald-500/10">
+
                     <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-emerald-600 dark:text-emerald-400" />
 
                     <p className="text-sm font-medium text-emerald-700 dark:text-emerald-400">
                       {t("jobDetails.applySuccess")}
                     </p>
+
                   </div>
                 )}
 
                 {/* Error */}
+
                 {applyError && (
                   <div className="mb-4 flex items-start gap-3 rounded-2xl border border-red-200 bg-red-50 p-4 dark:border-red-500/20 dark:bg-red-500/10">
+
                     <AlertCircle className="mt-0.5 h-5 w-5 shrink-0 text-red-600 dark:text-red-400" />
 
                     <p className="text-sm text-red-700 dark:text-red-400">
                       {applyError}
                     </p>
+
                   </div>
                 )}
 
                 {/* Favorite error */}
+
                 {favError && (
                   <div className="mb-4 rounded-xl bg-red-50 px-3 py-2 text-xs text-red-600 dark:bg-red-500/10 dark:text-red-400">
                     {favError}
@@ -541,6 +703,7 @@ export default function JobDetails() {
                 )}
 
                 {/* Apply */}
+
                 {isCandidate && (
                   <button
                     onClick={handleApply}
@@ -568,6 +731,7 @@ export default function JobDetails() {
 
                 {!user && (
                   <div>
+
                     <Link
                       to="/login"
                       className="flex w-full items-center justify-center gap-2 rounded-xl bg-indigo-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-indigo-700"
@@ -579,27 +743,37 @@ export default function JobDetails() {
                     <p className="mt-3 text-center text-xs text-slate-500 dark:text-slate-400">
                       {t("jobDetails.loginHint")}
                     </p>
+
                   </div>
                 )}
 
                 {user && !isCandidate && (
                   <div className="rounded-xl bg-slate-50 p-4 text-center dark:bg-slate-800">
+
                     <p className="text-sm text-slate-500 dark:text-slate-400">
                       {t("jobDetails.candidateOnly")}
                     </p>
+
                   </div>
                 )}
+
               </div>
             </section>
 
-            {/* Company card */}
+            {/* ================================================= */}
+            {/* COMPANY CARD */}
+            {/* ================================================= */}
+
             <section className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+
               <div className="flex items-center gap-3">
+
                 <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 text-white">
                   <Building2 className="h-5 w-5" />
                 </div>
 
                 <div className="min-w-0">
+
                   <p className="text-xs text-slate-400">
                     {t("jobDetails.company")}
                   </p>
@@ -607,10 +781,12 @@ export default function JobDetails() {
                   <h3 className="truncate font-semibold">
                     {job.company_name}
                   </h3>
+
                 </div>
               </div>
 
               <div className="mt-4 border-t border-slate-100 pt-4 dark:border-slate-800">
+
                 <Link
                   to="/jobs"
                   className="flex items-center justify-between text-sm font-medium text-indigo-600 hover:text-indigo-700 dark:text-indigo-400"
@@ -618,8 +794,104 @@ export default function JobDetails() {
                   {t("jobDetails.moreJobs")}
                   <ChevronRight className="h-4 w-4" />
                 </Link>
+
               </div>
             </section>
+
+            {/* ================================================= */}
+            {/* RECRUITER CARD */}
+            {/* ================================================= */}
+
+            {job.recruiter_user_id && (
+              <section className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+
+                <div className="flex items-center gap-3">
+
+                  {/* Profile picture */}
+
+                  <div className="flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 text-white shadow-sm">
+
+                    {recruiterPicture ? (
+                      <img
+                        src={recruiterPicture}
+                        alt={getRecruiterName()}
+                        className="h-full w-full object-cover"
+                      />
+                    ) : (
+                      <span className="text-sm font-bold">
+                        {getRecruiterInitials()}
+                      </span>
+                    )}
+
+                  </div>
+
+                  {/* Name */}
+
+                  <div className="min-w-0">
+
+                    <p className="text-xs text-slate-400">
+                      Recruteur
+                    </p>
+
+                    <h3 className="truncate font-semibold text-slate-900 dark:text-white">
+                      {getRecruiterName()}
+                    </h3>
+
+                    {job.recruiter_job_title && (
+                      <p className="mt-0.5 truncate text-xs text-slate-500 dark:text-slate-400">
+                        {job.recruiter_job_title}
+                      </p>
+                    )}
+
+                  </div>
+
+                </div>
+
+                {/* Recruiter information */}
+
+                <div className="mt-4 space-y-2 border-t border-slate-100 pt-4 dark:border-slate-800">
+
+                  {job.recruiter_email && (
+                    <div className="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400">
+
+                      <Mail className="h-4 w-4 shrink-0" />
+
+                      <span className="truncate">
+                        {job.recruiter_email}
+                      </span>
+
+                    </div>
+                  )}
+
+                  {job.recruiter_phone && (
+                    <div className="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400">
+
+                      <Phone className="h-4 w-4 shrink-0" />
+
+                      <span>
+                        {job.recruiter_phone}
+                      </span>
+
+                    </div>
+                  )}
+
+                </div>
+
+                {/* Chat button */}
+
+                {isCandidate && (
+                  <button
+                    onClick={goToRecruiterChat}
+                    className="mt-4 flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 px-4 py-3 text-sm font-semibold text-white shadow-sm transition hover:opacity-90 hover:shadow-md"
+                  >
+                    <MessageCircle className="h-4 w-4" />
+                    Contacter le recruteur
+                  </button>
+                )}
+
+              </section>
+            )}
+
           </aside>
         </div>
       </div>

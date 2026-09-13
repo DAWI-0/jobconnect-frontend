@@ -8,19 +8,19 @@ const resources = {
       // NAVBAR
       // -------------------------
       nav: {
-          home: "Accueil",
-          jobs: "Offres",
-          applications: "Mes candidatures",
-          myJobs: "Mes offres",
-          candidateApplications: "Candidatures",
-          dashboard: "Tableau de bord",
-          chat: "Messages",
-          login: "Connexion",
-          register: "Inscription",
-          logout: "Déconnexion",
-          favorites: "Favoris",
-          profile: "Profil",
-},
+        home: "Accueil",
+        jobs: "Offres",
+        applications: "Mes candidatures",
+        myJobs: "Mes offres",
+        candidateApplications: "Candidatures",
+        dashboard: "Tableau de bord",
+        chat: "Messages",
+        login: "Connexion",
+        register: "Inscription",
+        logout: "Déconnexion",
+        favorites: "Favoris",
+        profile: "Profil",
+      },
 
       // -------------------------
       // JOBS
@@ -49,7 +49,6 @@ const resources = {
 
         filter: "Filtrer",
         reset: "Réinitialiser",
-
         clearFilters: "Effacer les filtres",
         all: "Toutes",
 
@@ -73,9 +72,7 @@ const resources = {
         hybrid: "Hybride",
 
         salary: "Salaire",
-
         company: "Entreprise",
-
         posted: "Publié le",
 
         results: "Résultats",
@@ -110,31 +107,36 @@ const resources = {
       // APPLICATIONS
       // -------------------------
       applications: {
-  title: "Mes candidatures",
-  applications: "candidatures",
-  application: "candidature",
-  error: "Impossible de charger vos candidatures.",
-  empty: "Aucune candidature",
-  emptyDescription:
-    "Vous n'avez pas encore postulé à une offre. Consultez les offres disponibles et trouvez votre prochaine opportunité.",
-  browseJobs: "Parcourir les offres",
-  offer: "Offre",
-  location: "Lieu",
-  locationNotSpecified: "Non précisé",
-  contract: "Type de contrat",
-  appliedAt: "Date de candidature",
-  viewOffer: "Voir l'offre",
+        title: "Mes candidatures",
+        applications: "candidatures",
+        application: "candidature",
 
-  statuses: {
-    PENDING: "En attente",
-    REVIEWING: "En cours d'examen",
-    SHORTLISTED: "Présélectionné",
-    INTERVIEW: "Entretien",
-    ACCEPTED: "Accepté",
-    REJECTED: "Refusé",
-    WITHDRAWN: "Retirée",
-  },
-},
+        error: "Impossible de charger vos candidatures.",
+
+        empty: "Aucune candidature",
+
+        emptyDescription:
+          "Vous n'avez pas encore postulé à une offre. Consultez les offres disponibles et trouvez votre prochaine opportunité.",
+
+        browseJobs: "Parcourir les offres",
+
+        offer: "Offre",
+        location: "Lieu",
+        locationNotSpecified: "Non précisé",
+        contract: "Type de contrat",
+        appliedAt: "Date de candidature",
+        viewOffer: "Voir l'offre",
+
+        statuses: {
+          PENDING: "En attente",
+          REVIEWING: "En cours d'examen",
+          SHORTLISTED: "Présélectionné",
+          INTERVIEW: "Entretien",
+          ACCEPTED: "Accepté",
+          REJECTED: "Refusé",
+          WITHDRAWN: "Retirée",
+        },
+      },
 
       // -------------------------
       // FAVORITES
@@ -144,8 +146,7 @@ const resources = {
 
         loading: "Chargement de vos favoris...",
 
-        error:
-          "Impossible de charger vos favoris.",
+        error: "Impossible de charger vos favoris.",
 
         empty: "Aucune offre favorite",
 
@@ -155,9 +156,7 @@ const resources = {
         browseJobs: "Parcourir les offres",
 
         offer: "offre",
-
         company: "Entreprise",
-
         location: "Localisation",
 
         locationNotSpecified: "Non spécifiée",
@@ -344,29 +343,219 @@ const resources = {
         ctaSubtitle:
           "Rejoignez JobConnect et donnez un nouvel élan à votre carrière.",
       },
+
+      // -------------------------
+      // PROFILE
+      // -------------------------
       profile: {
-  title: "Mon profil",
-  edit: "Modifier le profil",
-  saveSuccess: "Profil mis à jour avec succès.",
-  saveError: "Erreur lors de la sauvegarde.",
-  loadError: "Erreur de chargement du profil.",
-  notFound: "Profil non trouvé.",
-  phone: "Téléphone",
-  location: "Localisation",
-  bio: "Bio",
-  linkedin: "LinkedIn",
-  github: "GitHub",
-  cv: "CV",
-  photo: "Photo de profil",
-  jobTitle: "Poste",
-  company: "Entreprise",
-},
-common: {
-  loading: "Chargement...",
-  save: "Enregistrer",
-  saving: "Sauvegarde...",
-  cancel: "Annuler",
-},
+        title: "Mon profil",
+        edit: "Modifier le profil",
+
+        saveSuccess:
+          "Profil mis à jour avec succès.",
+
+        saveError:
+          "Erreur lors de la sauvegarde.",
+
+        loadError:
+          "Erreur de chargement du profil.",
+
+        notFound:
+          "Profil non trouvé.",
+
+        phone:
+          "Téléphone",
+
+        location:
+          "Localisation",
+
+        bio:
+          "Bio",
+
+        linkedin:
+          "LinkedIn",
+
+        github:
+          "GitHub",
+
+        cv:
+          "CV",
+
+        photo:
+          "Photo de profil",
+
+        jobTitle:
+          "Poste",
+
+        company:
+          "Entreprise",
+
+        professionalInfo:
+          "Informations professionnelles",
+
+        accountType:
+          "Type de compte",
+
+        candidate:
+          "Candidat",
+
+        recruiter:
+          "Recruteur",
+
+        viewCv:
+          "Voir le CV",
+
+        uploadCv:
+          "Télécharger un CV",
+
+        changePhoto:
+          "Changer la photo",
+
+        uploadPhoto:
+          "Ajouter une photo",
+
+        noBio:
+          "Aucune biographie renseignée.",
+
+        noLocation:
+          "Localisation non renseignée",
+
+        noPhone:
+          "Téléphone non renseigné",
+
+        noLinkedin:
+          "LinkedIn non renseigné",
+
+        noGithub:
+          "GitHub non renseigné",
+      },
+
+      // -------------------------
+      // COMMON
+      // -------------------------
+      common: {
+        loading:
+          "Chargement...",
+
+        save:
+          "Enregistrer",
+
+        saving:
+          "Sauvegarde...",
+
+        cancel:
+          "Annuler",
+
+        edit:
+          "Modifier",
+
+        delete:
+          "Supprimer",
+
+        close:
+          "Fermer",
+
+        back:
+          "Retour",
+
+        confirm:
+          "Confirmer",
+
+        yes:
+          "Oui",
+
+        no:
+          "Non",
+      },
+
+      // -------------------------
+      // CHAT
+      // -------------------------
+      chat: {
+        title:
+          "Messages",
+
+        subtitle:
+          "Vos conversations",
+
+        user:
+          "Utilisateur",
+
+        noConversations:
+          "Aucune conversation",
+
+        selectConversation:
+          "Sélectionnez une conversation",
+
+        selectConversationDescription:
+          "Choisissez une conversation pour commencer.",
+
+        startConversation:
+          "Commencez une conversation avec cette personne.",
+
+        writeMessage:
+          "Écrire un message...",
+
+        send:
+          "Envoyer",
+
+        loading:
+          "Chargement des conversations...",
+
+        loadingMessages:
+          "Chargement des messages...",
+
+        connecting:
+          "Connexion...",
+
+        connected:
+          "En ligne",
+
+        disconnected:
+          "Hors ligne",
+
+        candidate:
+          "Candidat",
+
+        recruiter:
+          "Recruteur",
+
+        noMessages:
+          "Aucun message",
+
+        startChat:
+          "Commencer la conversation",
+
+        today:
+          "Aujourd'hui",
+
+        yesterday:
+          "Hier",
+
+        unread:
+          "non lu",
+
+        unreadMessages:
+          "messages non lus",
+
+        conversationCreated:
+          "Conversation créée avec succès.",
+
+        conversationError:
+          "Impossible de créer la conversation.",
+
+        loadError:
+          "Impossible de charger les conversations.",
+
+        messageError:
+          "Impossible d'envoyer le message.",
+
+        contactRecruiter:
+          "Contacter le recruteur",
+
+        contactCandidate:
+          "Contacter le candidat",
+      },
     },
   },
 
@@ -379,19 +568,19 @@ common: {
       // NAVBAR
       // -------------------------
       nav: {
-  home: "Home",
-  jobs: "Jobs",
-  applications: "My applications",
-  myJobs: "My jobs",
-  candidateApplications: "Applications",
-  dashboard: "Dashboard",
-  chat: "Messages",
-  login: "Login",
-  register: "Register",
-  logout: "Logout",
-  favorites: "Favorites",
-  profile: "Profile",
-},
+        home: "Home",
+        jobs: "Jobs",
+        applications: "My applications",
+        myJobs: "My jobs",
+        candidateApplications: "Applications",
+        dashboard: "Dashboard",
+        chat: "Messages",
+        login: "Login",
+        register: "Register",
+        logout: "Logout",
+        favorites: "Favorites",
+        profile: "Profile",
+      },
 
       // -------------------------
       // JOBS
@@ -400,122 +589,225 @@ common: {
         badge: "FIND YOUR NEXT OPPORTUNITY",
 
         title: "Job Offers",
+
         subtitle:
           "Find the opportunity that matches you",
 
-        searchTitle: "Search for a job",
+        searchTitle:
+          "Search for a job",
+
         searchSubtitle:
           "Use the filters to find the perfect job",
 
-        search: "Search",
+        search:
+          "Search",
+
         searchPlaceholder:
           "Job title, skill, or keyword",
 
-        location: "Location",
+        location:
+          "Location",
+
         locationPlaceholder:
           "City or region",
 
         filters: {
-          contract: "Contract type",
-          experience: "Experience level",
-          workMode: "Work mode",
+          contract:
+            "Contract type",
+
+          experience:
+            "Experience level",
+
+          workMode:
+            "Work mode",
         },
 
-        filter: "Filter",
-        reset: "Reset",
+        filter:
+          "Filter",
 
-        clearFilters: "Clear filters",
-        all: "All",
+        reset:
+          "Reset",
+
+        clearFilters:
+          "Clear filters",
+
+        all:
+          "All",
 
         contracts: {
-          cdi: "Permanent",
-          cdd: "Fixed-term",
-          internship: "Internship",
-          freelance: "Freelance",
-          partTime: "Part-time",
+          cdi:
+            "Permanent",
+
+          cdd:
+            "Fixed-term",
+
+          internship:
+            "Internship",
+
+          freelance:
+            "Freelance",
+
+          partTime:
+            "Part-time",
         },
 
         experience: {
-          entry: "Entry level",
-          junior: "Junior",
-          mid: "Mid-level",
-          senior: "Senior",
+          entry:
+            "Entry level",
+
+          junior:
+            "Junior",
+
+          mid:
+            "Mid-level",
+
+          senior:
+            "Senior",
         },
 
-        remote: "Remote",
-        onsite: "On-site",
-        hybrid: "Hybrid",
+        remote:
+          "Remote",
 
-        salary: "Salary",
+        onsite:
+          "On-site",
 
-        company: "Company",
+        hybrid:
+          "Hybrid",
 
-        posted: "Posted on",
+        salary:
+          "Salary",
 
-        results: "Results",
-        offers: "jobs",
-        total: "Total offers",
+        company:
+          "Company",
 
-        viewDetails: "View details",
+        posted:
+          "Posted on",
 
-        noJobs: "No jobs found",
+        results:
+          "Results",
+
+        offers:
+          "jobs",
+
+        total:
+          "Total offers",
+
+        viewDetails:
+          "View details",
+
+        noJobs:
+          "No jobs found",
+
         noJobsDescription:
           "No jobs match your search criteria.",
 
-        noResults: "No jobs found",
+        noResults:
+          "No jobs found",
+
         noResultsDescription:
           "No jobs match your search criteria.",
 
-        previous: "Previous",
-        next: "Next",
+        previous:
+          "Previous",
 
-        loading: "Loading jobs...",
-        error: "Unable to load jobs.",
-        retry: "Retry",
+        next:
+          "Next",
+
+        loading:
+          "Loading jobs...",
+
+        error:
+          "Unable to load jobs.",
+
+        retry:
+          "Retry",
 
         locationNotSpecified:
           "Location not specified",
 
-        fullTime: "Full-time",
-        permanent: "Permanent",
-        fixedTerm: "Fixed-term",
+        fullTime:
+          "Full-time",
+
+        permanent:
+          "Permanent",
+
+        fixedTerm:
+          "Fixed-term",
       },
 
       // -------------------------
       // APPLICATIONS
       // -------------------------
       applications: {
-  title: "My Applications",
-  applications: "applications",
-  application: "application",
-  error: "Unable to load your applications.",
-  empty: "No applications",
-  emptyDescription:
-    "You haven't applied to any jobs yet. Browse the available opportunities and find your next career move.",
-  browseJobs: "Browse Jobs",
-  offer: "Job Offer",
-  location: "Location",
-  locationNotSpecified: "Not specified",
-  contract: "Contract Type",
-  appliedAt: "Applied On",
-  viewOffer: "View Job",
+        title:
+          "My Applications",
 
-  statuses: {
-    PENDING: "Pending",
-    REVIEWING: "Under Review",
-    SHORTLISTED: "Shortlisted",
-    INTERVIEW: "Interview",
-    ACCEPTED: "Accepted",
-    REJECTED: "Rejected",
-    WITHDRAWN: "Withdrawn",
-  },
-},
+        applications:
+          "applications",
+
+        application:
+          "application",
+
+        error:
+          "Unable to load your applications.",
+
+        empty:
+          "No applications",
+
+        emptyDescription:
+          "You haven't applied to any jobs yet. Browse the available opportunities and find your next career move.",
+
+        browseJobs:
+          "Browse Jobs",
+
+        offer:
+          "Job Offer",
+
+        location:
+          "Location",
+
+        locationNotSpecified:
+          "Not specified",
+
+        contract:
+          "Contract Type",
+
+        appliedAt:
+          "Applied On",
+
+        viewOffer:
+          "View Job",
+
+        statuses: {
+          PENDING:
+            "Pending",
+
+          REVIEWING:
+            "Under Review",
+
+          SHORTLISTED:
+            "Shortlisted",
+
+          INTERVIEW:
+            "Interview",
+
+          ACCEPTED:
+            "Accepted",
+
+          REJECTED:
+            "Rejected",
+
+          WITHDRAWN:
+            "Withdrawn",
+        },
+      },
 
       // -------------------------
       // FAVORITES
       // -------------------------
       favorites: {
-        title: "My Favorites",
+        title:
+          "My Favorites",
 
         loading:
           "Loading your favorites...",
@@ -532,16 +824,20 @@ common: {
         browseJobs:
           "Browse jobs",
 
-        offer: "job",
+        offer:
+          "job",
 
-        company: "Company",
+        company:
+          "Company",
 
-        location: "Location",
+        location:
+          "Location",
 
         locationNotSpecified:
           "Not specified",
 
-        remove: "Remove",
+        remove:
+          "Remove",
 
         removeError:
           "Unable to remove this job from favorites.",
@@ -549,7 +845,8 @@ common: {
         viewOffer:
           "View job",
 
-        job: "Job",
+        job:
+          "Job",
       },
 
       // -------------------------
@@ -738,29 +1035,222 @@ common: {
         ctaSubtitle:
           "Join JobConnect and take the next step in your career.",
       },
+
+      // -------------------------
+      // PROFILE
+      // -------------------------
       profile: {
-  title: "My Profile",
-  edit: "Edit Profile",
-  saveSuccess: "Profile updated successfully.",
-  saveError: "Error saving profile.",
-  loadError: "Error loading profile.",
-  notFound: "Profile not found.",
-  phone: "Phone",
-  location: "Location",
-  bio: "Bio",
-  linkedin: "LinkedIn",
-  github: "GitHub",
-  cv: "CV",
-  photo: "Profile Picture",
-  jobTitle: "Job Title",
-  company: "Company",
-},
-common: {
-  loading: "Loading...",
-  save: "Save",
-  saving: "Saving...",
-  cancel: "Cancel",
-},
+        title:
+          "My Profile",
+
+        edit:
+          "Edit Profile",
+
+        saveSuccess:
+          "Profile updated successfully.",
+
+        saveError:
+          "Error saving profile.",
+
+        loadError:
+          "Error loading profile.",
+
+        notFound:
+          "Profile not found.",
+
+        phone:
+          "Phone",
+
+        location:
+          "Location",
+
+        bio:
+          "Bio",
+
+        linkedin:
+          "LinkedIn",
+
+        github:
+          "GitHub",
+
+        cv:
+          "CV",
+
+        photo:
+          "Profile Picture",
+
+        jobTitle:
+          "Job Title",
+
+        company:
+          "Company",
+
+        professionalInfo:
+          "Professional Information",
+
+        accountType:
+          "Account Type",
+
+        candidate:
+          "Candidate",
+
+        recruiter:
+          "Recruiter",
+
+        viewCv:
+          "View CV",
+
+        uploadCv:
+          "Upload CV",
+
+        changePhoto:
+          "Change photo",
+
+        uploadPhoto:
+          "Add photo",
+
+        noBio:
+          "No biography provided.",
+
+        noLocation:
+          "Location not provided",
+
+        noPhone:
+          "Phone not provided",
+
+        noLinkedin:
+          "LinkedIn not provided",
+
+        noGithub:
+          "GitHub not provided",
+      },
+
+      // -------------------------
+      // COMMON
+      // -------------------------
+      common: {
+        loading:
+          "Loading...",
+
+        save:
+          "Save",
+
+        saving:
+          "Saving...",
+
+        cancel:
+          "Cancel",
+
+        edit:
+          "Edit",
+
+        delete:
+          "Delete",
+
+        close:
+          "Close",
+
+        back:
+          "Back",
+
+        confirm:
+          "Confirm",
+
+        yes:
+          "Yes",
+
+        no:
+          "No",
+      },
+
+      // -------------------------
+      // CHAT
+      // -------------------------
+      chat: {
+        title:
+          "Messages",
+
+        subtitle:
+          "Your conversations",
+
+        user:
+          "User",
+
+        noConversations:
+          "No conversations",
+
+        selectConversation:
+          "Select a conversation",
+
+        selectConversationDescription:
+          "Choose a conversation to get started.",
+
+        startConversation:
+          "Start a conversation with this person.",
+
+        writeMessage:
+          "Write a message...",
+
+        send:
+          "Send",
+
+        loading:
+          "Loading conversations...",
+
+        loadingMessages:
+          "Loading messages...",
+
+        connecting:
+          "Connecting...",
+
+        connected:
+          "Online",
+
+        disconnected:
+          "Offline",
+
+        candidate:
+          "Candidate",
+
+        recruiter:
+          "Recruiter",
+
+        noMessages:
+          "No messages",
+
+        startChat:
+          "Start conversation",
+
+        today:
+          "Today",
+
+        yesterday:
+          "Yesterday",
+
+        unread:
+          "unread",
+
+        unreadMessages:
+          "unread messages",
+
+        conversationCreated:
+          "Conversation created successfully.",
+
+        conversationError:
+          "Unable to create the conversation.",
+
+        loadError:
+          "Unable to load conversations.",
+
+        messageError:
+          "Unable to send the message.",
+
+        contactRecruiter:
+          "Contact recruiter",
+
+        contactCandidate:
+          "Contact candidate",
+      },
     },
   },
 
@@ -773,27 +1263,29 @@ common: {
       // NAVBAR
       // -------------------------
       nav: {
-  home: "الرئيسية",
-  jobs: "الوظائف",
-  applications: "طلباتي",
-  myJobs: "عروضي",
-  candidateApplications: "طلبات التوظيف",
-  dashboard: "لوحة التحكم",
-  chat: "الرسائل",
-  login: "تسجيل الدخول",
-  register: "إنشاء حساب",
-  logout: "تسجيل الخروج",
-  favorites: "المفضلة",
-  profile: "الملف الشخصي",
-},
+        home: "الرئيسية",
+        jobs: "الوظائف",
+        applications: "طلباتي",
+        myJobs: "عروضي",
+        candidateApplications: "طلبات التوظيف",
+        dashboard: "لوحة التحكم",
+        chat: "الرسائل",
+        login: "تسجيل الدخول",
+        register: "إنشاء حساب",
+        logout: "تسجيل الخروج",
+        favorites: "المفضلة",
+        profile: "الملف الشخصي",
+      },
 
       // -------------------------
       // JOBS
       // -------------------------
       jobs: {
-        badge: "اعثر على فرصتك التالية",
+        badge:
+          "اعثر على فرصتك التالية",
 
-        title: "عروض العمل",
+        title:
+          "عروض العمل",
 
         subtitle:
           "اعثر على الفرصة التي تناسبك",
@@ -804,23 +1296,31 @@ common: {
         searchSubtitle:
           "استخدم الفلاتر للعثور على الوظيفة المناسبة",
 
-        search: "بحث",
+        search:
+          "بحث",
 
         searchPlaceholder:
           "المسمى الوظيفي، المهارة أو الكلمة المفتاحية",
 
-        location: "الموقع",
+        location:
+          "الموقع",
 
         locationPlaceholder:
           "المدينة أو المنطقة",
 
         filters: {
-          contract: "نوع العقد",
-          experience: "مستوى الخبرة",
-          workMode: "طريقة العمل",
+          contract:
+            "نوع العقد",
+
+          experience:
+            "مستوى الخبرة",
+
+          workMode:
+            "طريقة العمل",
         },
 
-        filter: "تصفية",
+        filter:
+          "تصفية",
 
         reset:
           "إعادة تعيين",
@@ -828,24 +1328,42 @@ common: {
         clearFilters:
           "مسح الفلاتر",
 
-        all: "الكل",
+        all:
+          "الكل",
 
         contracts: {
-          cdi: "عقد دائم",
-          cdd: "عقد محدد المدة",
-          internship: "تدريب",
-          freelance: "عمل حر",
-          partTime: "دوام جزئي",
+          cdi:
+            "عقد دائم",
+
+          cdd:
+            "عقد محدد المدة",
+
+          internship:
+            "تدريب",
+
+          freelance:
+            "عمل حر",
+
+          partTime:
+            "دوام جزئي",
         },
 
         experience: {
-          entry: "مبتدئ",
-          junior: "مستوى مبتدئ",
-          mid: "مستوى متوسط",
-          senior: "مستوى متقدم",
+          entry:
+            "مبتدئ",
+
+          junior:
+            "مستوى مبتدئ",
+
+          mid:
+            "مستوى متوسط",
+
+          senior:
+            "مستوى متقدم",
         },
 
-        remote: "عن بعد",
+        remote:
+          "عن بعد",
 
         onsite:
           "في مقر الشركة",
@@ -918,31 +1436,68 @@ common: {
       // APPLICATIONS
       // -------------------------
       applications: {
-  title: "طلباتي",
-  applications: "طلبات",
-  application: "طلب",
-  error: "تعذر تحميل طلبات التوظيف الخاصة بك.",
-  empty: "لا توجد طلبات",
-  emptyDescription:
-    "لم تتقدم إلى أي عرض عمل بعد. تصفح العروض المتاحة وابحث عن فرصتك المهنية القادمة.",
-  browseJobs: "تصفح عروض العمل",
-  offer: "عرض العمل",
-  location: "الموقع",
-  locationNotSpecified: "غير محدد",
-  contract: "نوع العقد",
-  appliedAt: "تاريخ التقديم",
-  viewOffer: "عرض الوظيفة",
+        title:
+          "طلباتي",
 
-  statuses: {
-    PENDING: "قيد الانتظار",
-    REVIEWING: "قيد المراجعة",
-    SHORTLISTED: "ضمن القائمة المختصرة",
-    INTERVIEW: "مقابلة",
-    ACCEPTED: "مقبول",
-    REJECTED: "مرفوض",
-    WITHDRAWN: "تم سحبه",
-  },
-},
+        applications:
+          "طلبات",
+
+        application:
+          "طلب",
+
+        error:
+          "تعذر تحميل طلبات التوظيف الخاصة بك.",
+
+        empty:
+          "لا توجد طلبات",
+
+        emptyDescription:
+          "لم تتقدم إلى أي عرض عمل بعد. تصفح العروض المتاحة وابحث عن فرصتك المهنية القادمة.",
+
+        browseJobs:
+          "تصفح عروض العمل",
+
+        offer:
+          "عرض العمل",
+
+        location:
+          "الموقع",
+
+        locationNotSpecified:
+          "غير محدد",
+
+        contract:
+          "نوع العقد",
+
+        appliedAt:
+          "تاريخ التقديم",
+
+        viewOffer:
+          "عرض الوظيفة",
+
+        statuses: {
+          PENDING:
+            "قيد الانتظار",
+
+          REVIEWING:
+            "قيد المراجعة",
+
+          SHORTLISTED:
+            "ضمن القائمة المختصرة",
+
+          INTERVIEW:
+            "مقابلة",
+
+          ACCEPTED:
+            "مقبول",
+
+          REJECTED:
+            "مرفوض",
+
+          WITHDRAWN:
+            "تم سحبه",
+        },
+      },
 
       // -------------------------
       // FAVORITES
@@ -1177,29 +1732,222 @@ common: {
         ctaSubtitle:
           "انضم إلى JobConnect وابدأ الخطوة التالية في مسيرتك المهنية.",
       },
+
+      // -------------------------
+      // PROFILE
+      // -------------------------
       profile: {
-  title: "الملف الشخصي",
-  edit: "تعديل الملف الشخصي",
-  saveSuccess: "تم تحديث الملف الشخصي بنجاح.",
-  saveError: "خطأ أثناء حفظ الملف الشخصي.",
-  loadError: "خطأ أثناء تحميل الملف الشخصي.",
-  notFound: "الملف الشخصي غير موجود.",
-  phone: "الهاتف",
-  location: "الموقع",
-  bio: "نبذة",
-  linkedin: "لينكدإن",
-  github: "جيت هاب",
-  cv: "السيرة الذاتية",
-  photo: "الصورة الشخصية",
-  jobTitle: "المسمى الوظيفي",
-  company: "الشركة",
-},
-common: {
-  loading: "جاري التحميل...",
-  save: "حفظ",
-  saving: "جاري الحفظ...",
-  cancel: "إلغاء",
-},
+        title:
+          "الملف الشخصي",
+
+        edit:
+          "تعديل الملف الشخصي",
+
+        saveSuccess:
+          "تم تحديث الملف الشخصي بنجاح.",
+
+        saveError:
+          "خطأ أثناء حفظ الملف الشخصي.",
+
+        loadError:
+          "خطأ أثناء تحميل الملف الشخصي.",
+
+        notFound:
+          "الملف الشخصي غير موجود.",
+
+        phone:
+          "الهاتف",
+
+        location:
+          "الموقع",
+
+        bio:
+          "نبذة",
+
+        linkedin:
+          "لينكدإن",
+
+        github:
+          "جيت هاب",
+
+        cv:
+          "السيرة الذاتية",
+
+        photo:
+          "الصورة الشخصية",
+
+        jobTitle:
+          "المسمى الوظيفي",
+
+        company:
+          "الشركة",
+
+        professionalInfo:
+          "المعلومات المهنية",
+
+        accountType:
+          "نوع الحساب",
+
+        candidate:
+          "مرشح",
+
+        recruiter:
+          "موظف توظيف",
+
+        viewCv:
+          "عرض السيرة الذاتية",
+
+        uploadCv:
+          "تحميل السيرة الذاتية",
+
+        changePhoto:
+          "تغيير الصورة",
+
+        uploadPhoto:
+          "إضافة صورة",
+
+        noBio:
+          "لا توجد نبذة متاحة.",
+
+        noLocation:
+          "الموقع غير محدد",
+
+        noPhone:
+          "رقم الهاتف غير محدد",
+
+        noLinkedin:
+          "لينكدإن غير محدد",
+
+        noGithub:
+          "جيت هاب غير محدد",
+      },
+
+      // -------------------------
+      // COMMON
+      // -------------------------
+      common: {
+        loading:
+          "جاري التحميل...",
+
+        save:
+          "حفظ",
+
+        saving:
+          "جاري الحفظ...",
+
+        cancel:
+          "إلغاء",
+
+        edit:
+          "تعديل",
+
+        delete:
+          "حذف",
+
+        close:
+          "إغلاق",
+
+        back:
+          "رجوع",
+
+        confirm:
+          "تأكيد",
+
+        yes:
+          "نعم",
+
+        no:
+          "لا",
+      },
+
+      // -------------------------
+      // CHAT
+      // -------------------------
+      chat: {
+        title:
+          "الرسائل",
+
+        subtitle:
+          "محادثاتك",
+
+        user:
+          "مستخدم",
+
+        noConversations:
+          "لا توجد محادثات",
+
+        selectConversation:
+          "اختر محادثة",
+
+        selectConversationDescription:
+          "اختر محادثة للبدء.",
+
+        startConversation:
+          "ابدأ محادثة مع هذا الشخص.",
+
+        writeMessage:
+          "اكتب رسالة...",
+
+        send:
+          "إرسال",
+
+        loading:
+          "جاري تحميل المحادثات...",
+
+        loadingMessages:
+          "جاري تحميل الرسائل...",
+
+        connecting:
+          "جاري الاتصال...",
+
+        connected:
+          "متصل",
+
+        disconnected:
+          "غير متصل",
+
+        candidate:
+          "مرشح",
+
+        recruiter:
+          "موظف توظيف",
+
+        noMessages:
+          "لا توجد رسائل",
+
+        startChat:
+          "بدء المحادثة",
+
+        today:
+          "اليوم",
+
+        yesterday:
+          "أمس",
+
+        unread:
+          "غير مقروء",
+
+        unreadMessages:
+          "رسائل غير مقروءة",
+
+        conversationCreated:
+          "تم إنشاء المحادثة بنجاح.",
+
+        conversationError:
+          "تعذر إنشاء المحادثة.",
+
+        loadError:
+          "تعذر تحميل المحادثات.",
+
+        messageError:
+          "تعذر إرسال الرسالة.",
+
+        contactRecruiter:
+          "التواصل مع موظف التوظيف",
+
+        contactCandidate:
+          "التواصل مع المرشح",
+      },
     },
   },
 };
