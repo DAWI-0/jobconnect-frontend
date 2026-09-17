@@ -21,6 +21,8 @@ import Profile from "./pages/profile/Profile";
 
 import Chat from "./pages/messaging/Chat";
 
+import AdminDashboard from "./pages/admin/AdminDashboard";
+
 import NotFound from "./pages/NotFound";
 
 function App() {
@@ -29,49 +31,64 @@ function App() {
       <BrowserRouter>
         <Routes>
 
-          {/* =========================
+          {/* =====================================================
               LAYOUT
-          ========================= */}
+          ===================================================== */}
           <Route element={<Layout />}>
 
-            {/* =========================
+            {/* =================================================
                 PUBLIC
-            ========================= */}
+            ================================================= */}
             <Route path="/" element={<Home />} />
+
             <Route path="/jobs" element={<Jobs />} />
-            <Route path="/jobs/:id" element={<JobDetails />} />
+
+            <Route
+              path="/jobs/:id"
+              element={<JobDetails />}
+            />
 
 
-            {/* =========================
+            {/* =================================================
                 CANDIDATE
-            ========================= */}
-            <Route path="/applications" element={<Applications />} />
-            <Route path="/favorites" element={<Favorites />} />
+            ================================================= */}
+            <Route
+              path="/applications"
+              element={<Applications />}
+            />
+
+            <Route
+              path="/favorites"
+              element={<Favorites />}
+            />
 
 
-            {/* =========================
+            {/* =================================================
                 PROFILE
-            ========================= */}
-            <Route path="/profile" element={<Profile />} />
+            ================================================= */}
+            <Route
+              path="/profile"
+              element={<Profile />}
+            />
 
 
-            {/* =========================
+            {/* =================================================
                 RECRUITER
-            ========================= */}
+            ================================================= */}
 
-            {/* Liste des jobs */}
+            {/* Liste des offres */}
             <Route
               path="/recruiter/jobs"
               element={<Jobs />}
             />
 
-            {/* Créer un nouveau job */}
+            {/* Créer une offre */}
             <Route
               path="/recruiter/jobs/new"
               element={<JobForm />}
             />
 
-            {/* Modifier un job */}
+            {/* Modifier une offre */}
             <Route
               path="/recruiter/jobs/:id/edit"
               element={<JobForm />}
@@ -84,9 +101,20 @@ function App() {
             />
 
 
-            {/* =========================
+            {/* =================================================
+                ADMIN
+            ================================================= */}
+
+            {/* Dashboard administrateur */}
+            <Route
+              path="/admin"
+              element={<AdminDashboard />}
+            />
+
+
+            {/* =================================================
                 CHAT
-            ========================= */}
+            ================================================= */}
             <Route
               path="/chat"
               element={<Chat />}
@@ -95,9 +123,10 @@ function App() {
           </Route>
 
 
-          {/* =========================
-              AUTH
-          ========================= */}
+          {/* =====================================================
+              AUTHENTICATION
+          ===================================================== */}
+
           <Route
             path="/login"
             element={<Login />}
@@ -109,9 +138,10 @@ function App() {
           />
 
 
-          {/* =========================
+          {/* =====================================================
               404
-          ========================= */}
+          ===================================================== */}
+
           <Route
             path="*"
             element={<NotFound />}

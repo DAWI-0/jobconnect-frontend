@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
 import {
   Camera,
   CheckCircle2,
@@ -19,69 +18,109 @@ import { useAuth } from "../../context/AuthContext";
 import api from "../../services/api";
 
 /* =========================================================
-   SOCIAL LOGOS
-========================================================= */
-
-function GitHubLogo({ size = 18, className = "" }) {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      width={size}
-      height={size}
-      fill="currentColor"
-      className={className}
-      aria-hidden="true"
-    >
-      <path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.56v-2.17c-3.2.7-3.88-1.35-3.88-1.35-.53-1.34-1.28-1.7-1.28-1.7-1.05-.72.08-.71.08-.71 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.23-1.28-5.23-5.69 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.79 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.84 1.19 3.1 0 4.42-2.69 5.39-5.25 5.68.41.35.78 1.04.78 2.1v3.11c0 .31.21.67.8.56A11.52 11.52 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5Z" />
-    </svg>
-  );
-}
-
-function LinkedInLogo({ size = 18, className = "" }) {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      width={size}
-      height={size}
-      fill="currentColor"
-      className={className}
-      aria-hidden="true"
-    >
-      <path d="M20.45 20.45h-3.56v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.14 1.44-2.14 2.94v5.67H9.34V8.99h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.29ZM5.32 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12ZM7.1 20.45H3.54V8.99H7.1v11.46ZM22.22 0H1.78C.8 0 0 .8 0 1.78v20.44C0 23.2.8 24 1.78 24h20.44C23.2 24 24 23.2 24 22.22V1.78C24 .8 23.2 0 22.22 0Z" />
-    </svg>
-  );
-}
-
-/* =========================================================
    HELPERS
 ========================================================= */
 
-function getInitials(name = "") {
-  const parts = name.trim().split(/\s+/).filter(Boolean);
+function getInitials(user, profile) {
+  const firstName =
+    user?.first_name || profile?.user_first_name || "";
 
-  if (!parts.length) return "U";
+  const lastName =
+    user?.last_name || profile?.user_last_name || "";
 
-  return parts
-    .slice(0, 2)
-    .map((part) => part[0]?.toUpperCase())
-    .join("");
+  if (firstName || lastName) {
+    return `${firstName.charAt(0)}${lastName.charAt(0)}`.toUpperCase();
+  }
+
+  const email =
+    user?.email || profile?.user_email || "";
+
+  if (email) {
+    return email.charAt(0).toUpperCase();
+  }
+
+  return "U";
 }
 
 function normalizeUrl(url) {
   if (!url) return "";
 
-  const value = String(url).trim();
-
-  if (!value) return "";
-
   if (
-    value.startsWith("http://") ||
-    value.startsWith("https://")
+    url.startsWith("http://") ||
+    url.startsWith("https://") ||
+    url.startsWith("blob:")
   ) {
-    return value;
+    return url;
   }
 
-  return `https://${value}`;
+  if (url.startsWith("/")) {
+    return `http://127.0.0.1:8000${url}`;
+  }
+
+  return `http://127.0.0.1:8000/${url}`;
+}
+
+function safeText(value, fallback = "") {
+  if (value === null || value === undefined) {
+    return fallback;
+  }
+
+  if (typeof value === "object") {
+    if (value.name) return String(value.name);
+    if (value.company_name) return String(value.company_name);
+    if (value.title) return String(value.title);
+    if (value.label) return String(value.label);
+
+    return fallback;
+  }
+
+  return String(value);
+}
+
+/* =========================================================
+   GITHUB LOGO
+========================================================= */
+
+function GitHubLogo({ className = "h-5 w-5" }) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      className={className}
+      aria-hidden="true"
+    >
+      <path
+        fillRule="evenodd"
+        d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483
+        0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.342-3.369-1.342-.454-1.157-1.11-1.465-1.11-1.465
+        -.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832
+        .092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.987 1.029-2.688
+        -.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0 1 12 6.844c.85.004
+        1.705.115 2.504.337 1.909-1.296 2.748-1.026 2.748-1.026.546 1.378.202 2.397.1 2.65
+        .64.701 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.31.678.92.678 1.855
+        0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0 0 22 12.017
+        C22 6.484 17.523 2 12 2Z"
+        clipRule="evenodd"
+      />
+    </svg>
+  );
+}
+
+/* =========================================================
+   LINKEDIN LOGO
+========================================================= */
+
+function LinkedInLogo({ className = "h-5 w-5" }) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      className={className}
+      aria-hidden="true"
+    >
+      <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.35V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.606 0 4.267 2.373 4.267 5.461v6.28ZM5.337 7.433a2.062 2.062 0 1 1 0-4.125 2.062 2.062 0 0 1 0 4.125ZM3.555 20.452h3.558V9H3.555v11.452Z" />
+    </svg>
+  );
 }
 
 /* =========================================================
@@ -90,19 +129,24 @@ function normalizeUrl(url) {
 
 function ProfileField({ icon: Icon, label, value }) {
   return (
-    <div className="flex items-start gap-3">
-      <div className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-indigo-50 text-indigo-600 dark:bg-indigo-500/10 dark:text-indigo-400">
-        <Icon size={18} />
-      </div>
+    <div className="rounded-xl border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800">
+      <div className="flex items-start gap-3">
 
-      <div className="min-w-0">
-        <p className="text-xs font-medium uppercase tracking-wide text-gray-400 dark:text-gray-500">
-          {label}
-        </p>
+        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-indigo-100 text-indigo-600 dark:bg-indigo-900/40 dark:text-indigo-400">
+          <Icon className="h-5 w-5" />
+        </div>
 
-        <p className="mt-1 break-words text-sm font-medium text-gray-800 dark:text-gray-200">
-          {value || "—"}
-        </p>
+        <div className="min-w-0 flex-1">
+
+          <p className="text-xs font-medium uppercase tracking-wide text-gray-500 dark:text-gray-400">
+            {label}
+          </p>
+
+          <p className="mt-1 break-words text-sm font-semibold text-gray-900 dark:text-white">
+            {safeText(value, "Non renseigné")}
+          </p>
+
+        </div>
       </div>
     </div>
   );
@@ -114,38 +158,45 @@ function ProfileField({ icon: Icon, label, value }) {
 
 function InputField({
   label,
-  name,
   value,
   onChange,
   placeholder,
-  icon: Icon,
   type = "text",
 }) {
   return (
     <div>
-      <label className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">
+
+      <label className="mb-2 block text-sm font-semibold text-gray-700 dark:text-gray-300">
         {label}
       </label>
 
-      <div className="relative">
-        {Icon && (
-          <Icon
-            size={18}
-            className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
-          />
-        )}
+      <input
+        type={type}
+        value={value}
+        onChange={onChange}
+        placeholder={placeholder}
+        className="
+          w-full
+          rounded-xl
+          border
+          border-gray-300
+          bg-white
+          px-4
+          py-3
+          text-sm
+          text-gray-900
+          outline-none
+          transition
+          focus:border-indigo-500
+          focus:ring-2
+          focus:ring-indigo-500/20
+          dark:border-gray-600
+          dark:bg-gray-800
+          dark:text-white
+          dark:placeholder-gray-500
+        "
+      />
 
-        <input
-          type={type}
-          name={name}
-          value={value}
-          onChange={onChange}
-          placeholder={placeholder}
-          className={`w-full rounded-xl border border-gray-200 bg-white py-3 text-sm text-gray-800 outline-none transition placeholder:text-gray-400 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white ${
-            Icon ? "pl-10 pr-4" : "px-4"
-          }`}
-        />
-      </div>
     </div>
   );
 }
@@ -155,13 +206,13 @@ function InputField({
 ========================================================= */
 
 export default function Profile() {
-  const { t } = useTranslation();
   const { user } = useAuth();
 
   const [profile, setProfile] = useState(null);
 
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+
   const [editing, setEditing] = useState(false);
 
   const [error, setError] = useState("");
@@ -181,9 +232,9 @@ export default function Profile() {
   const [photoFile, setPhotoFile] = useState(null);
   const [photoPreview, setPhotoPreview] = useState("");
 
-  /* =========================================================
+  /* =======================================================
      ROLE
-  ========================================================= */
+  ======================================================= */
 
   const role = String(
     user?.role ||
@@ -198,11 +249,28 @@ export default function Profile() {
     ? "/accounts/recruiters/"
     : "/accounts/candidates/";
 
-  /* =========================================================
-     PROFILE FORM
-  ========================================================= */
+  /* =======================================================
+     DISPLAY NAME
+  ======================================================= */
+
+  const displayName =
+    user?.first_name || user?.last_name
+      ? `${user?.first_name || ""} ${user?.last_name || ""}`.trim()
+      : user?.username ||
+        profile?.name ||
+        user?.email?.split("@")[0] ||
+        "Utilisateur";
+
+  /* =======================================================
+     FILL FORM
+  ======================================================= */
 
   const fillForm = (profileData) => {
+    const companyValue =
+      typeof profileData?.company === "object"
+        ? profileData?.company?.id || ""
+        : profileData?.company || "";
+
     setFormData({
       phone: profileData?.phone || "",
       location: profileData?.location || "",
@@ -210,79 +278,100 @@ export default function Profile() {
       linkedin_url: profileData?.linkedin_url || "",
       github_url: profileData?.github_url || "",
       job_title: profileData?.job_title || "",
-      company: profileData?.company || "",
+      company: companyValue,
     });
 
-    setPhotoPreview(profileData?.profile_picture || "");
+    setPhotoPreview(
+      normalizeUrl(profileData?.profile_picture || "")
+    );
   };
 
-  /* =========================================================
+  /* =======================================================
      EXTRACT PROFILE
-  ========================================================= */
+  ======================================================= */
 
   const extractProfile = (data) => {
     if (Array.isArray(data)) {
-      return data[0] || null;
+      return data.length > 0 ? data[0] : null;
     }
 
     if (Array.isArray(data?.results)) {
-      return data.results[0] || null;
+      return data.results.length > 0 ? data.results[0] : null;
     }
 
-    return data || null;
+    if (data && typeof data === "object") {
+      return data;
+    }
+
+    return null;
   };
 
-  /* =========================================================
-     LOAD PROFILE
-  ========================================================= */
-
-  useEffect(() => {
-    fetchProfile();
-  }, [endpoint]);
+  /* =======================================================
+     FETCH
+  ======================================================= */
 
   const fetchProfile = async () => {
+    if (!user) {
+      setLoading(false);
+      return;
+    }
+
     try {
       setLoading(true);
       setError("");
 
       const response = await api.get(endpoint);
 
+      console.log("PROFILE RESPONSE =", response.data);
+
       const profileData = extractProfile(response.data);
 
-      if (!profileData) {
-        throw new Error("PROFILE_NOT_FOUND");
+      if (profileData) {
+        setProfile(profileData);
+        fillForm(profileData);
+      } else {
+        setProfile(null);
       }
 
-      setProfile(profileData);
-      fillForm(profileData);
     } catch (err) {
-      console.error("PROFILE LOAD ERROR:", err);
+      console.error("PROFILE ERROR =", err);
 
-      setError(
+      const message =
         err?.response?.data?.detail ||
-          t("profile.loadError")
-      );
+        err?.response?.data?.message ||
+        "Impossible de charger le profil.";
+
+      setError(message);
+
     } finally {
       setLoading(false);
     }
   };
 
-  /* =========================================================
-     INPUT CHANGE
-  ========================================================= */
+  /* =======================================================
+     LOAD
+  ======================================================= */
+
+  useEffect(() => {
+    fetchProfile();
+  }, [user, endpoint]);
+
+  /* =======================================================
+     CHANGE
+  ======================================================= */
 
   const handleChange = (e) => {
     const { name, value } = e.target;
 
-    setFormData((previous) => ({
-      ...previous,
+    setFormData((prev) => ({
+      ...prev,
       [name]: value,
     }));
   };
 
-  /* =========================================================
-     PHOTO CHANGE
-  ========================================================= */
+  /* =======================================================
+     PHOTO
+  ======================================================= */
 
   const handlePhotoChange = (e) => {
     const file = e.target.files?.[0];
@@ -290,63 +379,63 @@ export default function Profile() {
     if (!file) return;
 
     if (!file.type.startsWith("image/")) {
-      setError(
-        "Veuillez sélectionner une image valide."
-      );
+      setError("Veuillez sélectionner une image valide.");
       return;
     }
 
     if (file.size > 5 * 1024 * 1024) {
-      setError(
-        "La photo ne doit pas dépasser 5 Mo."
-      );
+      setError("La photo ne doit pas dépasser 5 MB.");
       return;
     }
+
+    setError("");
 
     setPhotoFile(file);
 
     const previewUrl = URL.createObjectURL(file);
 
     setPhotoPreview(previewUrl);
-    setError("");
-    setSuccess("");
   };
 
-  /* =========================================================
-     CV CHANGE
-  ========================================================= */
+  /* =======================================================
+     CV
+  ======================================================= */
 
   const handleCvChange = (e) => {
     const file = e.target.files?.[0];
 
     if (!file) return;
 
-    const isPdf =
-      file.type === "application/pdf" ||
-      file.name.toLowerCase().endsWith(".pdf");
+    const extension = file.name
+      .split(".")
+      .pop()
+      ?.toLowerCase();
 
-    if (!isPdf) {
+    const allowedExtensions = [
+      "pdf",
+      "doc",
+      "docx",
+    ];
+
+    if (!allowedExtensions.includes(extension)) {
       setError(
-        "Veuillez sélectionner un fichier PDF."
+        "Le CV doit être au format PDF, DOC ou DOCX."
       );
       return;
     }
 
     if (file.size > 10 * 1024 * 1024) {
-      setError(
-        "Le CV ne doit pas dépasser 10 Mo."
-      );
+      setError("Le CV ne doit pas dépasser 10 MB.");
       return;
     }
 
-    setCvFile(file);
     setError("");
-    setSuccess("");
+    setCvFile(file);
   };
 
-  /* =========================================================
-     SAVE PROFILE
-  ========================================================= */
+  /* =======================================================
+     SAVE
+  ======================================================= */
 
   const handleSave = async () => {
     if (!profile?.id) {
@@ -359,19 +448,11 @@ export default function Profile() {
       setError("");
       setSuccess("");
 
-      const updateEndpoint = isRecruiter
-        ? `/accounts/recruiters/${profile.id}/`
-        : `/accounts/candidates/${profile.id}/`;
+      const hasFiles = cvFile || photoFile;
 
-      const hasCvFile = cvFile instanceof File;
-      const hasPhotoFile = photoFile instanceof File;
+      let dataToSend;
 
-      /* =====================================================
-         AVEC FICHIER
-         multipart/form-data
-      ===================================================== */
-
-      if (hasCvFile || hasPhotoFile) {
+      if (hasFiles) {
         const form = new FormData();
 
         form.append(
@@ -399,59 +480,35 @@ export default function Profile() {
           formData.github_url || ""
         );
 
-        form.append(
-          "job_title",
-          formData.job_title || ""
-        );
-
-        form.append(
-          "company",
-          formData.company || ""
-        );
-
-        /*
-         * IMPORTANT
-         * On ajoute uniquement les vrais fichiers.
-         */
-
-        if (hasCvFile) {
+        if (isRecruiter) {
           form.append(
-            "cv",
-            cvFile,
-            cvFile.name
+            "job_title",
+            formData.job_title || ""
           );
+
+          if (formData.company) {
+            form.append(
+              "company",
+              formData.company
+            );
+          }
         }
 
-        if (hasPhotoFile) {
+        if (cvFile) {
+          form.append("cv", cvFile);
+        }
+
+        if (photoFile) {
           form.append(
             "profile_picture",
-            photoFile,
-            photoFile.name
+            photoFile
           );
         }
 
-        /*
-         * NE PAS mettre :
-         *
-         * Content-Type: application/json
-         *
-         * Axios doit laisser le navigateur
-         * définir automatiquement le multipart boundary.
-         */
+        dataToSend = form;
 
-        await api.patch(
-          updateEndpoint,
-          form
-        );
-      }
-
-      /* =====================================================
-         SANS FICHIER
-         JSON
-      ===================================================== */
-
-      else {
-        const payload = {
+      } else {
+        dataToSend = {
           phone: formData.phone || "",
           location: formData.location || "",
           bio: formData.bio || "",
@@ -459,955 +516,962 @@ export default function Profile() {
             formData.linkedin_url || "",
           github_url:
             formData.github_url || "",
-          job_title:
-            formData.job_title || "",
-          company:
-            formData.company || "",
         };
 
-        await api.patch(
-          updateEndpoint,
-          payload
-        );
+        if (isRecruiter) {
+          dataToSend.job_title =
+            formData.job_title || "";
+
+          if (formData.company) {
+            dataToSend.company =
+              formData.company;
+          }
+        }
       }
 
-      /* =====================================================
-         RELOAD PROFILE
-      ===================================================== */
-
-      const response = await api.get(endpoint);
-
-      const updatedProfile = extractProfile(
-        response.data
+      await api.patch(
+        `${endpoint}${profile.id}/`,
+        dataToSend
       );
 
-      if (updatedProfile) {
-        setProfile(updatedProfile);
-        fillForm(updatedProfile);
-      }
+      setSuccess(
+        "Profil mis à jour avec succès."
+      );
 
       setCvFile(null);
       setPhotoFile(null);
 
       setEditing(false);
 
-      setSuccess(
-        t("profile.saveSuccess")
-      );
+      await fetchProfile();
+
     } catch (err) {
       console.error(
-        "PROFILE UPDATE ERROR:",
+        "SAVE PROFILE ERROR =",
         err
       );
 
       console.error(
-        "STATUS:",
-        err?.response?.status
-      );
-
-      console.error(
-        "SERVER RESPONSE:",
+        "SERVER RESPONSE =",
         err?.response?.data
       );
 
-      const serverError =
+      const serverData =
         err?.response?.data;
 
-      let message = t(
-        "profile.saveError"
-      );
+      let message =
+        "Impossible de mettre à jour le profil.";
 
-      if (
-        serverError &&
-        typeof serverError === "object"
-      ) {
-        message = Object.entries(
-          serverError
-        )
-          .map(([field, errors]) => {
-            if (Array.isArray(errors)) {
-              return `${field}: ${errors.join(
-                ", "
-              )}`;
-            }
-
-            return `${field}: ${String(
-              errors
-            )}`;
-          })
-          .join("\n");
+      if (typeof serverData === "string") {
+        message = serverData;
+      } else if (serverData?.detail) {
+        message = serverData.detail;
       } else if (
-        typeof serverError === "string"
+        serverData &&
+        typeof serverData === "object"
       ) {
-        message = serverError;
+        const firstError =
+          Object.values(serverData)[0];
+
+        if (Array.isArray(firstError)) {
+          message = firstError[0];
+        } else if (
+          typeof firstError === "string"
+        ) {
+          message = firstError;
+        }
       }
 
       setError(message);
+
     } finally {
       setSaving(false);
     }
   };
 
-  /* =========================================================
+  /* =======================================================
      CANCEL
-  ========================================================= */
+  ======================================================= */
 
   const handleCancel = () => {
-    setEditing(false);
-
-    setCvFile(null);
-    setPhotoFile(null);
-
     if (profile) {
       fillForm(profile);
     }
 
+    setCvFile(null);
+    setPhotoFile(null);
+
+    setEditing(false);
     setError("");
-    setSuccess("");
   };
 
-  /* =========================================================
-     DISPLAY DATA
-  ========================================================= */
+  /* =======================================================
+     URLS
+  ======================================================= */
 
-  const displayName =
-    user?.first_name ||
-    user?.last_name
-      ? `${user?.first_name || ""} ${
-          user?.last_name || ""
-        }`.trim()
-      : user?.username ||
-        profile?.name ||
-        user?.email?.split("@")[0] ||
-        "Utilisateur";
-
-  const email =
-    user?.email ||
-    profile?.email ||
-    "";
-
-  const jobTitle =
-    profile?.job_title ||
-    profile?.position ||
-    (isRecruiter
-      ? "Recruiter"
-      : "Candidate");
-
-  const profilePicture =
-    photoPreview ||
-    profile?.profile_picture ||
-    "";
-
-  const cvUrl = profile?.cv || "";
+  const cvUrl = normalizeUrl(profile?.cv);
 
   const linkedinUrl = normalizeUrl(
-    profile?.linkedin_url
+    profile?.linkedin_url || ""
   );
 
   const githubUrl = normalizeUrl(
-    profile?.github_url
+    profile?.github_url || ""
   );
 
-  /* =========================================================
+  /* =======================================================
      LOADING
-  ========================================================= */
+  ======================================================= */
 
   if (loading) {
     return (
       <div className="flex min-h-[70vh] items-center justify-center">
         <div className="flex flex-col items-center gap-3">
-          <Loader2
-            size={34}
-            className="animate-spin text-indigo-600"
-          />
+
+          <Loader2 className="h-8 w-8 animate-spin text-indigo-600" />
 
           <p className="text-sm text-gray-500 dark:text-gray-400">
-            {t("common.loading")}
+            Chargement du profil...
           </p>
+
         </div>
       </div>
     );
   }
 
-  /* =========================================================
+  /* =======================================================
      PAGE
-  ========================================================= */
+  ======================================================= */
 
   return (
-    <div className="min-h-screen bg-gray-50 px-4 py-6 dark:bg-gray-950 sm:px-6 lg:px-8">
-      <div className="mx-auto max-w-5xl">
+    <div className="mx-auto w-full max-w-6xl px-4 py-6 sm:px-6 lg:px-8">
 
-        {/* =================================================
-            ALERTS
-        ================================================= */}
+      {/* =====================================================
+          PROFILE HEADER
+      ===================================================== */}
 
-        {error && (
-          <div className="mb-5 flex items-start gap-3 whitespace-pre-line rounded-2xl border border-red-200 bg-red-50 p-4 text-sm text-red-700 dark:border-red-900/40 dark:bg-red-950/30 dark:text-red-300">
-            <X
-              size={18}
-              className="mt-0.5 shrink-0"
-            />
+      <div
+        className="
+          overflow-hidden
+          rounded-3xl
+          bg-indigo-600
+          shadow-lg
+        "
+      >
 
-            <span className="break-words">
-              {error}
-            </span>
-          </div>
-        )}
+        {/* ===================================================
+            PROFILE AREA
+            UNE SEULE COULEUR :
+            INDIGO-600
+        =================================================== */}
 
-        {success && (
-          <div className="mb-5 flex items-start gap-3 rounded-2xl border border-emerald-200 bg-emerald-50 p-4 text-sm text-emerald-700 dark:border-emerald-900/40 dark:bg-emerald-950/30 dark:text-emerald-300">
-            <CheckCircle2
-              size={18}
-              className="mt-0.5 shrink-0"
-            />
+        <div
+          className="
+            relative
+            px-5
+            pb-7
+            pt-5
+            sm:px-8
+          "
+        >
 
-            <span>{success}</span>
-          </div>
-        )}
+          <div
+            className="
+              flex
+              flex-col
+              items-center
+              gap-5
+              sm:flex-row
+              sm:items-center
+            "
+          >
 
-        {/* =================================================
-            PROFILE HEADER
-        ================================================= */}
+            {/* =================================================
+                PHOTO
+            ================================================= */}
 
-        <div className="overflow-hidden rounded-3xl border border-gray-200 bg-white shadow-sm dark:border-gray-800 dark:bg-gray-900">
+            <div className="relative shrink-0">
 
-          {/* COVER */}
+              <div
+                className="
+                  flex
+                  h-32
+                  w-32
+                  items-center
+                  justify-center
+                  overflow-hidden
+                  rounded-full
+                  border-4
+                  border-white
+                  bg-white
+                  text-3xl
+                  font-bold
+                  text-indigo-600
+                  shadow-xl
+                "
+              >
 
-          <div className="relative h-40 overflow-hidden bg-gradient-to-r from-indigo-600 via-indigo-500 to-purple-600 sm:h-48">
-            <div className="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-white/10 blur-3xl" />
+                {photoPreview ? (
+                  <img
+                    src={photoPreview}
+                    alt="Profile"
+                    className="
+                      h-full
+                      w-full
+                      object-cover
+                    "
+                  />
+                ) : (
+                  getInitials(
+                    user,
+                    profile
+                  )
+                )}
 
-            <div className="absolute -bottom-24 left-10 h-64 w-64 rounded-full bg-purple-300/20 blur-3xl" />
-
-            <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
-          </div>
-
-          {/* HEADER */}
-
-          <div className="relative px-5 pb-6 sm:px-8">
-            <div className="-mt-16 flex flex-col gap-5 sm:-mt-20 sm:flex-row sm:items-end sm:justify-between">
-
-              <div className="flex min-w-0 flex-col items-center gap-4 sm:flex-row sm:items-end">
-
-                {/* AVATAR */}
-
-                <div className="relative shrink-0">
-                  <div className="flex h-32 w-32 items-center justify-center overflow-hidden rounded-3xl border-4 border-white bg-gradient-to-br from-indigo-500 to-purple-600 text-3xl font-bold text-white shadow-xl dark:border-gray-900 sm:h-36 sm:w-36">
-
-                    {profilePicture ? (
-                      <img
-                        src={profilePicture}
-                        alt={displayName}
-                        className="h-full w-full object-cover"
-                      />
-                    ) : (
-                      getInitials(
-                        displayName
-                      )
-                    )}
-                  </div>
-
-                  {editing && (
-                    <label className="absolute bottom-2 right-2 flex h-10 w-10 cursor-pointer items-center justify-center rounded-xl border-2 border-white bg-gray-900 text-white shadow-lg transition hover:bg-gray-800 dark:border-gray-900">
-                      <Camera size={18} />
-
-                      <input
-                        type="file"
-                        accept="image/*"
-                        onChange={
-                          handlePhotoChange
-                        }
-                        className="hidden"
-                      />
-                    </label>
-                  )}
-                </div>
-
-                {/* IDENTITY */}
-
-                <div className="min-w-0 text-center sm:pb-2 sm:text-left">
-                  <h1 className="truncate text-2xl font-bold text-gray-900 dark:text-white sm:text-3xl">
-                    {displayName}
-                  </h1>
-
-                  <p className="mt-1 text-sm font-medium text-indigo-600 dark:text-indigo-400">
-                    {jobTitle}
-                  </p>
-
-                  <div className="mt-2 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-sm text-gray-500 dark:text-gray-400 sm:justify-start">
-
-                    {email && (
-                      <span className="flex items-center gap-1.5">
-                        <Mail size={15} />
-
-                        <span className="max-w-[220px] truncate">
-                          {email}
-                        </span>
-                      </span>
-                    )}
-
-                    {profile?.location && (
-                      <span className="flex items-center gap-1.5">
-                        <MapPin size={15} />
-
-                        {profile.location}
-                      </span>
-                    )}
-                  </div>
-                </div>
               </div>
 
-              {/* ACTIONS */}
-
-              {!editing ? (
-                <button
-                  type="button"
-                  onClick={() => {
-                    setEditing(true);
-                    setError("");
-                    setSuccess("");
-                  }}
-                  className="flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-indigo-500/20 transition hover:-translate-y-0.5 hover:shadow-xl"
+              {editing && (
+                <label
+                  htmlFor="profile-picture"
+                  className="
+                    absolute
+                    bottom-0
+                    right-0
+                    flex
+                    h-10
+                    w-10
+                    cursor-pointer
+                    items-center
+                    justify-center
+                    rounded-full
+                    border-2
+                    border-white
+                    bg-indigo-600
+                    text-white
+                    shadow-lg
+                    transition
+                    hover:bg-indigo-700
+                  "
                 >
-                  <Edit3 size={17} />
 
-                  {t("profile.edit")}
-                </button>
-              ) : (
-                <div className="flex w-full gap-2 sm:w-auto">
+                  <Camera className="h-5 w-5" />
 
-                  <button
-                    type="button"
-                    onClick={
-                      handleCancel
-                    }
-                    disabled={saving}
-                    className="flex flex-1 items-center justify-center gap-2 rounded-xl border border-gray-200 bg-white px-5 py-3 text-sm font-semibold text-gray-700 transition hover:bg-gray-50 disabled:opacity-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700 sm:flex-none"
-                  >
-                    <X size={17} />
+                  <input
+                    id="profile-picture"
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={handlePhotoChange}
+                  />
 
-                    {t("common.cancel")}
-                  </button>
+                </label>
+              )}
 
-                  <button
-                    type="button"
-                    onClick={
-                      handleSave
-                    }
-                    disabled={saving}
-                    className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-indigo-500/20 transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-60 sm:flex-none"
-                  >
-                    {saving ? (
-                      <>
-                        <Loader2
-                          size={17}
-                          className="animate-spin"
-                        />
+            </div>
 
-                        {t(
-                          "common.saving"
-                        )}
-                      </>
-                    ) : (
-                      <>
-                        <Save size={17} />
+            {/* =================================================
+                NAME / ROLE / EMAIL
 
-                        {t(
-                          "common.save"
-                        )}
-                      </>
-                    )}
-                  </button>
+                MÊME COULEUR QUE LE BACKGROUND
+                PAS DE DARK COLOR
+            ================================================= */}
+
+            <div
+              className="
+                min-w-0
+                flex-1
+                text-center
+                text-white
+                sm:text-left
+              "
+            >
+
+              {/* NOM */}
+
+              <h1
+                className="
+                  truncate
+                  text-3xl
+                  font-extrabold
+                  leading-tight
+                  text-white
+                "
+              >
+                {displayName}
+              </h1>
+
+              {/* ROLE */}
+
+              <p
+                className="
+                  mt-2
+                  text-base
+                  font-semibold
+                  text-white
+                "
+              >
+                {isRecruiter
+                  ? safeText(
+                      profile?.job_title,
+                      "Recruteur"
+                    )
+                  : "Candidat"}
+              </p>
+
+              {/* EMAIL */}
+
+              {user?.email && (
+                <div
+                  className="
+                    mt-3
+                    flex
+                    items-center
+                    justify-center
+                    gap-2
+                    text-sm
+                    text-white
+                    sm:justify-start
+                  "
+                >
+
+                  <Mail className="h-4 w-4 shrink-0 text-white" />
+
+                  <span className="truncate">
+                    {user.email}
+                  </span>
+
                 </div>
               )}
+
             </div>
+
           </div>
+
+          {/* =================================================
+              BUTTONS
+          ================================================= */}
+
+          <div
+            className="
+              mt-6
+              flex
+              flex-wrap
+              justify-center
+              gap-3
+              sm:justify-end
+            "
+          >
+
+            {!editing ? (
+              <button
+                type="button"
+                onClick={() => {
+                  setError("");
+                  setSuccess("");
+                  setEditing(true);
+                }}
+                className="
+                  inline-flex
+                  items-center
+                  gap-2
+                  rounded-xl
+                  bg-white
+                  px-5
+                  py-3
+                  text-sm
+                  font-semibold
+                  text-indigo-600
+                  transition
+                  hover:bg-gray-100
+                "
+              >
+
+                <Edit3 className="h-4 w-4" />
+
+                Modifier le profil
+
+              </button>
+            ) : (
+              <>
+                <button
+                  type="button"
+                  onClick={handleCancel}
+                  disabled={saving}
+                  className="
+                    inline-flex
+                    items-center
+                    gap-2
+                    rounded-xl
+                    bg-white
+                    px-5
+                    py-3
+                    text-sm
+                    font-semibold
+                    text-indigo-600
+                    transition
+                    hover:bg-gray-100
+                    disabled:opacity-50
+                  "
+                >
+
+                  <X className="h-4 w-4" />
+
+                  Annuler
+
+                </button>
+
+                <button
+                  type="button"
+                  onClick={handleSave}
+                  disabled={saving}
+                  className="
+                    inline-flex
+                    items-center
+                    gap-2
+                    rounded-xl
+                    bg-white
+                    px-5
+                    py-3
+                    text-sm
+                    font-semibold
+                    text-indigo-600
+                    transition
+                    hover:bg-gray-100
+                    disabled:opacity-50
+                  "
+                >
+
+                  {saving ? (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  ) : (
+                    <Save className="h-4 w-4" />
+                  )}
+
+                  {saving
+                    ? "Enregistrement..."
+                    : "Enregistrer"}
+
+                </button>
+              </>
+            )}
+
+          </div>
+
         </div>
+      </div>
 
-        {/* =================================================
-            EDIT MODE
-        ================================================= */}
+      {/* =====================================================
+          MESSAGES
+      ===================================================== */}
 
-        {editing ? (
-          <div className="mt-6 space-y-6">
+      {error && (
+        <div className="mt-5 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-700 dark:border-red-900/50 dark:bg-red-950/30 dark:text-red-400">
+          {error}
+        </div>
+      )}
 
-            {/* CONTACT */}
+      {success && (
+        <div className="mt-5 flex items-center gap-2 rounded-xl border border-green-200 bg-green-50 px-4 py-3 text-sm font-medium text-green-700 dark:border-green-900/50 dark:bg-green-950/30 dark:text-green-400">
 
-            <section className="rounded-3xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-800 dark:bg-gray-900 sm:p-7">
+          <CheckCircle2 className="h-5 w-5 shrink-0" />
 
-              <div className="mb-6">
-                <h2 className="text-lg font-bold text-gray-900 dark:text-white">
-                  {t("profile.title")}
-                </h2>
+          {success}
 
-                <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-                  {t("profile.edit")}
-                </p>
-              </div>
+        </div>
+      )}
 
-              <div className="grid gap-5 md:grid-cols-2">
+      {/* =====================================================
+          CONTENT
+      ===================================================== */}
 
-                <InputField
-                  label={t("profile.phone")}
-                  name="phone"
-                  value={
-                    formData.phone
-                  }
-                  onChange={
-                    handleChange
-                  }
-                  placeholder="+212 6 XX XX XX XX"
-                  icon={Phone}
+      <div className="mt-6 grid gap-6 lg:grid-cols-3">
+
+        {/* ===================================================
+            LEFT
+        =================================================== */}
+
+        <div className="space-y-6 lg:col-span-2">
+
+          {/* =================================================
+              INFORMATIONS PERSONNELLES
+          ================================================= */}
+
+          <section className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-700 dark:bg-gray-900 sm:p-6">
+
+            <div className="mb-5">
+
+              <h2 className="text-lg font-bold text-gray-900 dark:text-white">
+                Informations personnelles
+              </h2>
+
+              <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                Vos coordonnées et informations principales.
+              </p>
+
+            </div>
+
+            {!editing ? (
+              <div className="grid gap-4 sm:grid-cols-2">
+
+                {/* LOCALISATION UNIQUEMENT ICI */}
+
+                <ProfileField
+                  icon={MapPin}
+                  label="Localisation"
+                  value={profile?.location}
                 />
 
+                <ProfileField
+                  icon={Phone}
+                  label="Téléphone"
+                  value={profile?.phone}
+                />
+
+                {isRecruiter && (
+                  <>
+                    <ProfileField
+                      icon={User}
+                      label="Poste"
+                      value={profile?.job_title}
+                    />
+
+                    <ProfileField
+                      icon={User}
+                      label="Entreprise"
+                      value={profile?.company}
+                    />
+                  </>
+                )}
+
+              </div>
+            ) : (
+              <div className="grid gap-5 sm:grid-cols-2">
+
                 <InputField
-                  label={t(
-                    "profile.location"
-                  )}
-                  name="location"
-                  value={
-                    formData.location
+                  label="Téléphone"
+                  value={formData.phone}
+                  onChange={(e) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      phone: e.target.value,
+                    }))
                   }
-                  onChange={
-                    handleChange
+                  placeholder="Votre numéro"
+                />
+
+                {/* LOCALISATION UNIQUEMENT ICI */}
+
+                <InputField
+                  label="Localisation"
+                  value={formData.location}
+                  onChange={(e) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      location: e.target.value,
+                    }))
                   }
                   placeholder="Casablanca, Maroc"
-                  icon={MapPin}
                 />
 
-                <InputField
-                  label={t(
-                    "profile.jobTitle"
-                  )}
-                  name="job_title"
-                  value={
-                    formData.job_title
-                  }
-                  onChange={
-                    handleChange
-                  }
-                  placeholder="Développeur Full Stack"
-                  icon={User}
-                />
+                {isRecruiter && (
+                  <>
+                    <InputField
+                      label="Poste"
+                      value={formData.job_title}
+                      onChange={(e) =>
+                        setFormData((prev) => ({
+                          ...prev,
+                          job_title: e.target.value,
+                        }))
+                      }
+                      placeholder="Ex: Responsable RH"
+                    />
 
-                <InputField
-                  label={t(
-                    "profile.company"
-                  )}
-                  name="company"
-                  value={
-                    formData.company
-                  }
-                  onChange={
-                    handleChange
-                  }
-                  placeholder="Nom de l'entreprise"
-                  icon={User}
-                />
+                    <InputField
+                      label="Entreprise"
+                      value={formData.company}
+                      onChange={(e) =>
+                        setFormData((prev) => ({
+                          ...prev,
+                          company: e.target.value,
+                        }))
+                      }
+                      placeholder="ID de l'entreprise"
+                    />
+                  </>
+                )}
+
               </div>
+            )}
 
-              {/* BIO */}
+          </section>
 
-              <div className="mt-5">
-                <label className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">
-                  {t("profile.bio")}
-                </label>
+          {/* =================================================
+              BIO
+          ================================================= */}
 
-                <textarea
-                  name="bio"
-                  value={
-                    formData.bio
-                  }
-                  onChange={
-                    handleChange
-                  }
-                  rows={5}
-                  placeholder="Présentez-vous professionnellement..."
-                  className="w-full resize-none rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-gray-800 outline-none transition placeholder:text-gray-400 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
-                />
-              </div>
-            </section>
+          <section className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-700 dark:bg-gray-900 sm:p-6">
 
-            {/* SOCIAL */}
+            <div className="mb-5">
 
-            <section className="rounded-3xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-800 dark:bg-gray-900 sm:p-7">
-
-              <h2 className="mb-6 text-lg font-bold text-gray-900 dark:text-white">
-                {t("profile.linkedin")} /{" "}
-                {t("profile.github")}
+              <h2 className="text-lg font-bold text-gray-900 dark:text-white">
+                À propos de moi
               </h2>
 
-              <div className="grid gap-5 md:grid-cols-2">
-
-                {/* LINKEDIN */}
-
-                <div>
-                  <label className="mb-2 flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300">
-
-                    <LinkedInLogo
-                      size={17}
-                      className="text-[#0A66C2]"
-                    />
-
-                    {t(
-                      "profile.linkedin"
-                    )}
-                  </label>
-
-                  <input
-                    type="url"
-                    name="linkedin_url"
-                    value={
-                      formData.linkedin_url
-                    }
-                    onChange={
-                      handleChange
-                    }
-                    placeholder="https://linkedin.com/in/..."
-                    className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-gray-800 outline-none transition placeholder:text-gray-400 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
-                  />
-                </div>
-
-                {/* GITHUB */}
-
-                <div>
-                  <label className="mb-2 flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300">
-
-                    <GitHubLogo size={17} />
-
-                    {t(
-                      "profile.github"
-                    )}
-                  </label>
-
-                  <input
-                    type="url"
-                    name="github_url"
-                    value={
-                      formData.github_url
-                    }
-                    onChange={
-                      handleChange
-                    }
-                    placeholder="https://github.com/..."
-                    className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-gray-800 outline-none transition placeholder:text-gray-400 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
-                  />
-                </div>
-              </div>
-            </section>
-
-            {/* FILES */}
-
-            <section className="rounded-3xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-800 dark:bg-gray-900 sm:p-7">
-
-              <h2 className="mb-6 text-lg font-bold text-gray-900 dark:text-white">
-                {t("profile.cv")} /{" "}
-                {t("profile.photo")}
-              </h2>
-
-              <div className="grid gap-5 md:grid-cols-2">
-
-                {/* PHOTO */}
-
-                <div>
-                  <p className="mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">
-                    {t(
-                      "profile.photo"
-                    )}
-                  </p>
-
-                  <label className="group flex cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed border-gray-300 bg-gray-50 p-6 transition hover:border-indigo-400 hover:bg-indigo-50/50 dark:border-gray-700 dark:bg-gray-800/50 dark:hover:border-indigo-500">
-
-                    {photoPreview ? (
-                      <img
-                        src={
-                          photoPreview
-                        }
-                        alt="Preview"
-                        className="mb-4 h-24 w-24 rounded-2xl object-cover shadow-md"
-                      />
-                    ) : (
-                      <div className="mb-4 flex h-20 w-20 items-center justify-center rounded-2xl bg-indigo-100 text-indigo-600 dark:bg-indigo-500/10 dark:text-indigo-400">
-                        <Camera
-                          size={30}
-                        />
-                      </div>
-                    )}
-
-                    <div className="flex items-center gap-2 text-sm font-semibold text-indigo-600 dark:text-indigo-400">
-                      <Upload size={16} />
-
-                      {t(
-                        "profile.photo"
-                      )}
-                    </div>
-
-                    <p className="mt-1 text-xs text-gray-400">
-                      PNG, JPG, WEBP — 5 Mo max
-                    </p>
-
-                    <input
-                      type="file"
-                      accept="image/*"
-                      onChange={
-                        handlePhotoChange
-                      }
-                      className="hidden"
-                    />
-                  </label>
-
-                  {photoFile && (
-                    <p className="mt-2 truncate text-xs text-emerald-600">
-                      Nouveau fichier :{" "}
-                      {photoFile.name}
-                    </p>
-                  )}
-                </div>
-
-                {/* CV */}
-
-                <div>
-                  <p className="mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">
-                    {t(
-                      "profile.cv"
-                    )}
-                  </p>
-
-                  <label className="flex min-h-[220px] cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed border-gray-300 bg-gray-50 p-6 text-center transition hover:border-indigo-400 hover:bg-indigo-50/50 dark:border-gray-700 dark:bg-gray-800/50 dark:hover:border-indigo-500">
-
-                    <div className="mb-4 flex h-20 w-20 items-center justify-center rounded-2xl bg-indigo-100 text-indigo-600 dark:bg-indigo-500/10 dark:text-indigo-400">
-                      <FileText size={32} />
-                    </div>
-
-                    <p className="max-w-full truncate text-sm font-semibold text-gray-800 dark:text-gray-200">
-                      {cvFile
-                        ? cvFile.name
-                        : cvUrl
-                          ? "CV actuel"
-                          : t(
-                              "profile.cv"
-                            )}
-                    </p>
-
-                    <p className="mt-2 text-xs text-gray-400">
-                      PDF uniquement — 10 Mo max
-                    </p>
-
-                    <div className="mt-4 flex items-center gap-2 rounded-lg bg-indigo-600 px-4 py-2 text-xs font-semibold text-white">
-                      <Upload size={14} />
-
-                      {cvFile
-                        ? "Changer le CV"
-                        : t(
-                            "profile.uploadCv"
-                          )}
-                    </div>
-
-                    <input
-                      type="file"
-                      accept=".pdf,application/pdf"
-                      onChange={
-                        handleCvChange
-                      }
-                      className="hidden"
-                    />
-                  </label>
-
-                  {cvFile && (
-                    <p className="mt-2 truncate text-xs text-emerald-600">
-                      Nouveau fichier :{" "}
-                      {cvFile.name}
-                    </p>
-                  )}
-                </div>
-              </div>
-            </section>
-          </div>
-        ) : (
-
-          /* =================================================
-             VIEW MODE
-          ================================================= */
-
-          <div className="mt-6 grid gap-6 lg:grid-cols-3">
-
-            {/* LEFT */}
-
-            <div className="space-y-6 lg:col-span-2">
-
-              {/* ABOUT */}
-
-              <section className="rounded-3xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-800 dark:bg-gray-900 sm:p-7">
-
-                <h2 className="mb-5 text-lg font-bold text-gray-900 dark:text-white">
-                  {t("profile.bio")}
-                </h2>
-
-                <p className="whitespace-pre-line text-sm leading-7 text-gray-600 dark:text-gray-300">
-                  {profile?.bio || "—"}
-                </p>
-              </section>
-
-              {/* INFORMATION */}
-
-              <section className="rounded-3xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-800 dark:bg-gray-900 sm:p-7">
-
-                <h2 className="mb-6 text-lg font-bold text-gray-900 dark:text-white">
-                  Informations
-                </h2>
-
-                <div className="grid gap-6 sm:grid-cols-2">
-
-                  <ProfileField
-                    icon={Phone}
-                    label={t(
-                      "profile.phone"
-                    )}
-                    value={
-                      profile?.phone
-                    }
-                  />
-
-                  <ProfileField
-                    icon={MapPin}
-                    label={t(
-                      "profile.location"
-                    )}
-                    value={
-                      profile?.location
-                    }
-                  />
-
-                  <ProfileField
-                    icon={User}
-                    label={t(
-                      "profile.jobTitle"
-                    )}
-                    value={
-                      profile?.job_title
-                    }
-                  />
-
-                  <ProfileField
-                    icon={Mail}
-                    label="Email"
-                    value={email}
-                  />
-
-                  <ProfileField
-                    icon={User}
-                    label={t(
-                      "profile.company"
-                    )}
-                    value={
-                      profile?.company
-                    }
-                  />
-                </div>
-              </section>
-
-              {/* SOCIAL */}
-
-              <section className="rounded-3xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-800 dark:bg-gray-900 sm:p-7">
-
-                <h2 className="mb-5 text-lg font-bold text-gray-900 dark:text-white">
-                  Profils professionnels
-                </h2>
-
-                <div className="grid gap-4 sm:grid-cols-2">
-
-                  {linkedinUrl && (
-                    <a
-                      href={
-                        linkedinUrl
-                      }
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center gap-4 rounded-2xl border border-gray-200 p-4 transition hover:-translate-y-0.5 hover:border-[#0A66C2] hover:shadow-md dark:border-gray-700"
-                    >
-                      <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#0A66C2]/10 text-[#0A66C2]">
-                        <LinkedInLogo
-                          size={22}
-                        />
-                      </div>
-
-                      <div className="min-w-0">
-                        <p className="font-semibold text-gray-900 dark:text-white">
-                          LinkedIn
-                        </p>
-
-                        <p className="truncate text-xs text-gray-500 dark:text-gray-400">
-                          Voir le profil
-                        </p>
-                      </div>
-                    </a>
-                  )}
-
-                  {githubUrl && (
-                    <a
-                      href={
-                        githubUrl
-                      }
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center gap-4 rounded-2xl border border-gray-200 p-4 transition hover:-translate-y-0.5 hover:border-gray-400 hover:shadow-md dark:border-gray-700"
-                    >
-                      <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-white">
-                        <GitHubLogo
-                          size={22}
-                        />
-                      </div>
-
-                      <div className="min-w-0">
-                        <p className="font-semibold text-gray-900 dark:text-white">
-                          GitHub
-                        </p>
-
-                        <p className="truncate text-xs text-gray-500 dark:text-gray-400">
-                          Voir le profil
-                        </p>
-                      </div>
-                    </a>
-                  )}
-
-                  {!linkedinUrl &&
-                    !githubUrl && (
-                      <p className="text-sm text-gray-500 dark:text-gray-400">
-                        Aucun profil professionnel renseigné.
-                      </p>
-                    )}
-                </div>
-              </section>
             </div>
 
-            {/* RIGHT */}
+            {!editing ? (
+              <p className="whitespace-pre-line break-words text-sm leading-7 text-gray-600 dark:text-gray-300">
+                {safeText(
+                  profile?.bio,
+                  "Aucune description renseignée."
+                )}
+              </p>
+            ) : (
+              <textarea
+                value={formData.bio}
+                onChange={(e) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    bio: e.target.value,
+                  }))
+                }
+                rows={6}
+                placeholder="Présentez-vous..."
+                className="
+                  w-full
+                  resize-none
+                  rounded-xl
+                  border
+                  border-gray-300
+                  bg-white
+                  px-4
+                  py-3
+                  text-sm
+                  text-gray-900
+                  outline-none
+                  focus:border-indigo-500
+                  focus:ring-2
+                  focus:ring-indigo-500/20
+                  dark:border-gray-600
+                  dark:bg-gray-800
+                  dark:text-white
+                "
+              />
+            )}
 
-            <div className="space-y-6">
+          </section>
 
-              {/* CV */}
+          {/* =================================================
+              SOCIAL
+          ================================================= */}
 
-              <section className="overflow-hidden rounded-3xl border border-gray-200 bg-white shadow-sm dark:border-gray-800 dark:bg-gray-900">
+          <section className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-700 dark:bg-gray-900 sm:p-6">
 
-                <div className="bg-gradient-to-br from-indigo-600 to-purple-600 p-6 text-white">
+            <div className="mb-5">
 
-                  <div className="flex items-center justify-between">
+              <h2 className="text-lg font-bold text-gray-900 dark:text-white">
+                Réseaux professionnels
+              </h2>
 
-                    <div>
-                      <p className="text-xs font-semibold uppercase tracking-wider text-white/70">
-                        {t(
-                          "profile.cv"
-                        )}
-                      </p>
+            </div>
 
-                      <h2 className="mt-1 text-xl font-bold">
-                        Curriculum Vitae
-                      </h2>
-                    </div>
+            {!editing ? (
+              <div className="grid gap-4 sm:grid-cols-2">
 
-                    <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/15 backdrop-blur">
-                      <FileText size={25} />
-                    </div>
+                {linkedinUrl ? (
+                  <a
+                    href={linkedinUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="
+                      flex
+                      items-center
+                      gap-3
+                      rounded-xl
+                      border
+                      border-gray-200
+                      p-4
+                      text-gray-700
+                      transition
+                      hover:border-indigo-300
+                      hover:text-indigo-600
+                      dark:border-gray-700
+                      dark:text-gray-200
+                    "
+                  >
+                    <LinkedInLogo className="h-5 w-5" />
+
+                    <span className="text-sm font-semibold">
+                      LinkedIn
+                    </span>
+                  </a>
+                ) : (
+                  <div className="rounded-xl border border-gray-200 p-4 text-sm text-gray-400 dark:border-gray-700">
+                    LinkedIn non renseigné
                   </div>
+                )}
+
+                {githubUrl ? (
+                  <a
+                    href={githubUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="
+                      flex
+                      items-center
+                      gap-3
+                      rounded-xl
+                      border
+                      border-gray-200
+                      p-4
+                      text-gray-700
+                      transition
+                      hover:border-indigo-300
+                      hover:text-indigo-600
+                      dark:border-gray-700
+                      dark:text-gray-200
+                    "
+                  >
+                    <GitHubLogo className="h-5 w-5" />
+
+                    <span className="text-sm font-semibold">
+                      GitHub
+                    </span>
+                  </a>
+                ) : (
+                  <div className="rounded-xl border border-gray-200 p-4 text-sm text-gray-400 dark:border-gray-700">
+                    GitHub non renseigné
+                  </div>
+                )}
+
+              </div>
+            ) : (
+              <div className="grid gap-5 sm:grid-cols-2">
+
+                <InputField
+                  label="LinkedIn"
+                  value={formData.linkedin_url}
+                  onChange={(e) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      linkedin_url: e.target.value,
+                    }))
+                  }
+                  placeholder="https://linkedin.com/in/..."
+                />
+
+                <InputField
+                  label="GitHub"
+                  value={formData.github_url}
+                  onChange={(e) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      github_url: e.target.value,
+                    }))
+                  }
+                  placeholder="https://github.com/..."
+                />
+
+              </div>
+            )}
+
+          </section>
+        </div>
+
+        {/* ===================================================
+            RIGHT
+        =================================================== */}
+
+        <div className="space-y-6">
+
+          {/* =================================================
+              CV
+          ================================================= */}
+
+          <section className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-900">
+
+            <div className="bg-indigo-600 px-5 py-4">
+
+              <div className="flex items-center gap-3 text-white">
+
+                <FileText className="h-6 w-6" />
+
+                <div>
+
+                  <h2 className="font-bold">
+                    Curriculum Vitae
+                  </h2>
+
+                  <p className="text-xs text-white/80">
+                    PDF, DOC ou DOCX · 10 MB max
+                  </p>
+
                 </div>
 
-                <div className="p-5">
+              </div>
 
-                  {cvUrl ? (
-                    <>
-                      <div className="mb-4 rounded-2xl bg-gray-50 p-4 dark:bg-gray-800/70">
+            </div>
 
-                        <div className="flex items-center gap-3">
+            <div className="p-5">
 
-                          <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-red-50 text-red-500 dark:bg-red-500/10">
-                            <FileText
-                              size={22}
-                            />
-                          </div>
+              {cvUrl ? (
+                <div className="rounded-xl border border-gray-200 bg-gray-50 p-4 dark:border-gray-700 dark:bg-gray-800">
 
-                          <div className="min-w-0">
-                            <p className="truncate text-sm font-semibold text-gray-800 dark:text-gray-200">
-                              CV.pdf
-                            </p>
+                  <div className="flex items-center gap-3">
 
-                            <p className="text-xs text-gray-400">
-                              Document PDF
-                            </p>
-                          </div>
-                        </div>
-                      </div>
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-indigo-100 text-indigo-600 dark:bg-indigo-900/40 dark:text-indigo-400">
+                      <FileText className="h-5 w-5" />
+                    </div>
 
-                      <a
-                        href={cvUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex w-full items-center justify-center gap-2 rounded-xl bg-gray-900 px-4 py-3 text-sm font-semibold text-white transition hover:bg-gray-800 dark:bg-white dark:text-gray-900 dark:hover:bg-gray-200"
-                      >
-                        <FileText size={17} />
+                    <div className="min-w-0 flex-1">
 
-                        Voir le CV
-                      </a>
-                    </>
-                  ) : (
-                    <div className="py-5 text-center">
-
-                      <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-gray-100 text-gray-400 dark:bg-gray-800">
-                        <FileText size={28} />
-                      </div>
-
-                      <p className="text-sm font-medium text-gray-600 dark:text-gray-300">
-                        Aucun CV ajouté
+                      <p className="truncate text-sm font-semibold text-gray-900 dark:text-white">
+                        CV disponible
                       </p>
 
-                      <button
-                        type="button"
-                        onClick={() =>
-                          setEditing(true)
-                        }
-                        className="mt-4 inline-flex items-center gap-2 rounded-xl bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-indigo-700"
-                      >
-                        <Upload size={16} />
+                      <p className="text-xs text-gray-500 dark:text-gray-400">
+                        Votre CV est enregistré.
+                      </p>
 
-                        Ajouter un CV
-                      </button>
                     </div>
-                  )}
+
+                  </div>
+
+                  <a
+                    href={cvUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="
+                      mt-4
+                      flex
+                      w-full
+                      items-center
+                      justify-center
+                      gap-2
+                      rounded-xl
+                      bg-indigo-600
+                      px-4
+                      py-3
+                      text-sm
+                      font-semibold
+                      text-white
+                      transition
+                      hover:bg-indigo-700
+                    "
+                  >
+                    <FileText className="h-4 w-4" />
+                    Voir le CV
+                  </a>
+
                 </div>
-              </section>
+              ) : (
+                <div className="rounded-xl border border-dashed border-gray-300 p-5 text-center dark:border-gray-600">
 
-              {/* ACCOUNT TYPE */}
+                  <FileText className="mx-auto h-8 w-8 text-gray-400" />
 
-              <section className="rounded-3xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+                  <p className="mt-2 text-sm font-medium text-gray-600 dark:text-gray-300">
+                    Aucun CV ajouté
+                  </p>
 
-                <p className="text-xs font-semibold uppercase tracking-wider text-gray-400">
+                </div>
+              )}
+
+              {editing && (
+                <div className="mt-4">
+
+                  <label
+                    htmlFor="cv-upload"
+                    className="
+                      flex
+                      cursor-pointer
+                      items-center
+                      justify-center
+                      gap-2
+                      rounded-xl
+                      border
+                      border-indigo-200
+                      bg-indigo-50
+                      px-4
+                      py-3
+                      text-sm
+                      font-semibold
+                      text-indigo-700
+                      transition
+                      hover:bg-indigo-100
+                      dark:border-indigo-900
+                      dark:bg-indigo-950
+                      dark:text-indigo-300
+                    "
+                  >
+
+                    <Upload className="h-4 w-4" />
+
+                    {cvFile
+                      ? cvFile.name
+                      : cvUrl
+                        ? "Remplacer le CV"
+                        : "Ajouter un CV"}
+
+                    <input
+                      id="cv-upload"
+                      type="file"
+                      accept=".pdf,.doc,.docx"
+                      className="hidden"
+                      onChange={handleCvChange}
+                    />
+
+                  </label>
+
+                </div>
+              )}
+
+            </div>
+          </section>
+
+          {/* =================================================
+              ACCOUNT
+          ================================================= */}
+
+          <section className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-700 dark:bg-gray-900">
+
+            <h2 className="mb-4 text-lg font-bold text-gray-900 dark:text-white">
+              Compte
+            </h2>
+
+            <div className="space-y-4">
+
+              <div>
+
+                <p className="text-xs font-medium uppercase tracking-wide text-gray-500 dark:text-gray-400">
+                  Email
+                </p>
+
+                <p className="mt-1 break-all text-sm font-semibold text-gray-900 dark:text-white">
+                  {user?.email || "Non renseigné"}
+                </p>
+
+              </div>
+
+              <div>
+
+                <p className="text-xs font-medium uppercase tracking-wide text-gray-500 dark:text-gray-400">
                   Type de compte
                 </p>
 
-                <div className="mt-4 flex items-center gap-3">
+                <p className="mt-1 text-sm font-semibold text-gray-900 dark:text-white">
+                  {isRecruiter
+                    ? "Recruteur"
+                    : "Candidat"}
+                </p>
 
-                  <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-indigo-50 text-indigo-600 dark:bg-indigo-500/10 dark:text-indigo-400">
-                    <User size={20} />
-                  </div>
+              </div>
 
-                  <div>
-                    <p className="font-semibold text-gray-900 dark:text-white">
-                      {isRecruiter
-                        ? t(
-                            "chat.recruiter"
-                          )
-                        : t(
-                            "chat.candidate"
-                          )}
-                    </p>
-
-                    <p className="text-xs text-gray-500 dark:text-gray-400">
-                      JobConnect
-                    </p>
-                  </div>
-                </div>
-              </section>
             </div>
-          </div>
-        )}
+          </section>
+
+        </div>
       </div>
     </div>
   );
-}
+} 
